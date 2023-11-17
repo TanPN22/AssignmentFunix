@@ -1,0 +1,10 @@
+11:06:57 **** Incremental Build of configuration Debug for project Assignment01.IoT303x ****
+make -j16 all 
+arm-none-eabi-size   Assignment01.IoT303x.elf 
+   text	   data	    bss	    dec	    hex	filename
+   5676	     44	   1980	   7700	   1e14	Assignment01.IoT303x.elf
+Finished building: default.size.stdout
+ 
+
+11:06:57 Build Finished. 0 errors, 0 warnings. (took 393ms)
+

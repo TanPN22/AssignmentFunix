@@ -1,0 +1,5 @@
+../Src/main.c:42:13:Buzzer_Init	16	static
+../Src/main.c:65:13:Button_Init	16	static
+../Src/main.c:88:13:Buzzer_control	16	static
+../Src/main.c:96:16:Button_GetLogic	16	static
+../Src/main.c:113:5:main	16	static

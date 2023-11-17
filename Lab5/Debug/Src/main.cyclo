@@ -1,0 +1,15 @@
+../Src/main.c:81:10:Calculate_time	2
+../Src/main.c:91:6:Delay	2
+../Src/main.c:96:5:main	4
+../Src/main.c:128:6:I2C3_Init	1
+../Src/main.c:172:6:I2C1_Init	1
+../Src/main.c:228:6:I2C1_EV_IRQHandler	5
+../Src/main.c:252:13:Led_Init	1
+../Src/main.c:267:13:Button_Init	1
+../Src/main.c:283:6:I2C_Start	3
+../Src/main.c:292:6:I2C_SendAddress	2
+../Src/main.c:298:6:I2C_TransmitData	2
+../Src/main.c:304:6:I2C_Stop	1
+../Src/main.c:308:16:Button_GetLogic	1
+../Src/main.c:312:6:Led_control	3
+../Src/main.c:320:6:Green_control	3
