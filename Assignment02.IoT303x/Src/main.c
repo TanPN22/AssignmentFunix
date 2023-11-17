@@ -40,7 +40,7 @@ static ucg_t ucg;
 
 #define SLAVE_ADDRESS					0x40<<1
 
-static uint16_t Recive_Data[5];
+static uint32_t Recive_Data[5];
 
 /******************************************************************************/
 /*                     EXPORTED TYPES and DEFINITIONS                         */
@@ -87,22 +87,37 @@ int main(void)
 	I2C1_Init();
 	TimerInit();
 	SystemInit();
-	char buffer[256] = "b0";
+	char buffer1[256] = "b0";
+	char buffer2[256] = "b0";
 	uint32_t Timetick = 0;
-	uint16_t  i = 0;
 	AppInitCommon();
     /* Loop forever */
 	while (1){
-		I2C_Start(I2C_Direction_Receiver);
-		I2C_TransmitData(0xE5);
-
 
 		if (Calculate_time(Timetick, GetMilSecTick()) >= 1000){
-			i++;
+			I2C_Start(I2C_Direction_Transmitter);
+			I2C_TransmitData(0xE5);
+			I2C_Stop();
+
+			I2C_Start(I2C_Direction_Receiver);
+			Recive_Data[0] = (I2C_Recevie_ack()<<8)*100/65536 - 6;
+			I2C_Stop();
+
+			I2C_Start(I2C_Direction_Transmitter);
+			I2C_TransmitData(0xE3);
+			I2C_Stop();
+
+			I2C_Start(I2C_Direction_Receiver);
+			Recive_Data[1] = (I2C_Recevie_ack()<<8)*175.72/65536 - 46.85;
+			I2C_Stop();
 			Timetick = GetMilSecTick();
-			memset(buffer,0,sizeof(buffer));
-			sprintf(buffer,"b: %d",i);
-			ucg_DrawString(&ucg, 60, 24, 0,buffer);
+			memset(buffer1,0,sizeof(buffer1));
+			sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+			memset(buffer2,0,sizeof(buffer2));
+			sprintf(buffer2,"TEMP: %d oC",Recive_Data[1]);
+			ucg_DrawString(&ucg, 10, 35, 0,"Assignment 2");
+			ucg_DrawString(&ucg, 10, 65, 0,buffer1);
+			ucg_DrawString(&ucg, 10, 100, 0,buffer2);
 		}
 		processTimerScheduler();
 	}
@@ -135,9 +150,7 @@ void I2C1_Init(void){
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
 
 
-	GPIO_InitStructure.GPIO_Pin = SCL_MASTER_PIN;
-	GPIO_Init(I2C_MASTER_PORT, &GPIO_InitStructure);
-
+	GPIO_InitStructure.GPIO_Pin = SCL_MASTER_PIN | SDA_MASTER_PIN;
 	GPIO_Init(I2C_MASTER_PORT, &GPIO_InitStructure);
 
 	//Chon PA8 lam chan SCL
@@ -152,7 +165,7 @@ void I2C1_Init(void){
 	I2C_InitStructure.I2C_ClockSpeed = I2C_SPEED;
 	I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
 	I2C_InitStructure.I2C_OwnAddress1 = 0x00;
-	I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
+	I2C_InitStructure.I2C_Ack = I2C_Ack_Disable;
 	I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
 
 	//Khoi tao I2C
@@ -193,18 +206,17 @@ uint8_t I2C_Recevie_nack(void){
 	//Bat ACK cua recevie data
 	I2C_AcknowledgeConfig(I2C_MASTER_INSTANCE, ENABLE);
 
+	I2C_GenerateSTOP(I2C_MASTER_INSTANCE, ENABLE);
 	//Doi khi nhan dc 1 byte
 	while (!I2C_CheckEvent(I2C_MASTER_INSTANCE, I2C_EVENT_MASTER_BYTE_RECEIVED));
 
 	uint8_t data = I2C_ReceiveData(I2C_MASTER_INSTANCE);
-
 	return data;
 }
 
 uint8_t I2C_Recevie_ack(void){
 	//Bat ACK cua recevie data
 	I2C_AcknowledgeConfig(I2C_MASTER_INSTANCE, DISABLE);
-	I2C_GenerateSTOP(I2C_MASTER_INSTANCE, ENABLE);
 
 	//Doi khi nhan dc 1 byte
 	while (!I2C_CheckEvent(I2C_MASTER_INSTANCE, I2C_EVENT_MASTER_BYTE_RECEIVED));

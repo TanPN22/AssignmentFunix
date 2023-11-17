@@ -1,8 +1,86 @@
-16:40:08 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+22:37:41 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
 make -j16 all 
 arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:149:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  149 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:149:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  149 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                                ~~~~^     ~~~~~~~~~~~~~~
+      |                                                    |                |
+      |                                                    int              uint32_t {aka long unsigned int}
+      |                                                %0.2ld
+../Src/main.c:151:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  151 |                         sprintf(buffer2,"TEMP: %d oC",Recive_Data[1]);
+      |                                                ~^     ~~~~~~~~~~~~~~
+      |                                                 |                |
+      |                                                 int              uint32_t {aka long unsigned int}
+      |                                                %ld
+arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Assignment02.IoT303x.elf
+ 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+arm-none-eabi-objdump -h -S  Assignment02.IoT303x.elf  > "Assignment02.IoT303x.list"
+   text	   data	    bss	    dec	    hex	filename
+  18856	    108	   6620	  25584	   63f0	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+Finished building: Assignment02.IoT303x.list
+ 
+22:39:13 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:151:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  151 |                         sprintf(buffer1,"HUMI: %0.2d %%",humidity);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:151:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'double' [-Wformat=]
+  151 |                         sprintf(buffer1,"HUMI: %0.2d %%",humidity);
+      |                                                ~~~~^     ~~~~~~~~
+      |                                                    |     |
+      |                                                    int   double
+      |                                                %0.2f
+../Src/main.c:153:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'double' [-Wformat=]
+  153 |                         sprintf(buffer2,"TEMP: %d oC",temperature);
+      |                                                ~^     ~~~~~~~~~~~
+      |                                                 |     |
+      |                                                 int   double
+      |                                                %f
+At top level:
 ../Src/main.c:43:17: warning: 'Recive_Data' defined but not used [-Wunused-variable]
-   43 | static uint16_t Recive_Data[5];
+   43 | static uint32_t Recive_Data[5];
+      |                 ^~~~~~~~~~~
+arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+D:/DH/STM32/STM32CubeIDE_1.13.2/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.1.202309131626/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Src/main.o: in function `readTemperature':
+D:/DH/Lumi/Lab/Assignment02.IoT303x/Debug/../Src/main.c:85: undefined reference to `I2C_stop'
+D:/DH/STM32/STM32CubeIDE_1.13.2/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.1.202309131626/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Src/main.o: in function `readHumidity':
+D:/DH/Lumi/Lab/Assignment02.IoT303x/Debug/../Src/main.c:102: undefined reference to `I2C_stop'
+collect2.exe: error: ld returned 1 exit status
+make: *** [makefile:73: Assignment02.IoT303x.elf] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+22:39:43 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:151:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  151 |                         sprintf(buffer1,"HUMI: %0.2d %%",humidity);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:151:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'double' [-Wformat=]
+  151 |                         sprintf(buffer1,"HUMI: %0.2d %%",humidity);
+      |                                                ~~~~^     ~~~~~~~~
+      |                                                    |     |
+      |                                                    int   double
+      |                                                %0.2f
+../Src/main.c:153:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'double' [-Wformat=]
+  153 |                         sprintf(buffer2,"TEMP: %d oC",temperature);
+      |                                                ~^     ~~~~~~~~~~~
+      |                                                 |     |
+      |                                                 int   double
+      |                                                %f
+At top level:
+../Src/main.c:43:17: warning: 'Recive_Data' defined but not used [-Wunused-variable]
+   43 | static uint32_t Recive_Data[5];
       |                 ^~~~~~~~~~~
 arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: Assignment02.IoT303x.elf
@@ -10,7 +88,569 @@ Finished building target: Assignment02.IoT303x.elf
 arm-none-eabi-size   Assignment02.IoT303x.elf 
 arm-none-eabi-objdump -h -S  Assignment02.IoT303x.elf  > "Assignment02.IoT303x.list"
    text	   data	    bss	    dec	    hex	filename
-  19304	    108	   6604	  26016	   65a0	Assignment02.IoT303x.elf
+  22172	    108	   6604	  28884	   70d4	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+Finished building: Assignment02.IoT303x.list
+ 
+22:40:03 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+   text	   data	    bss	    dec	    hex	filename
+  22172	    108	   6604	  28884	   70d4	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+22:46:13 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:151:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  151 |                         sprintf(buffer1,"HUMI: %0.2d %%",humidity);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:151:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'double' [-Wformat=]
+  151 |                         sprintf(buffer1,"HUMI: %0.2d %%",humidity);
+      |                                                ~~~~^     ~~~~~~~~
+      |                                                    |     |
+      |                                                    int   double
+      |                                                %0.2f
+../Src/main.c:153:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'double' [-Wformat=]
+  153 |                         sprintf(buffer2,"TEMP: %d oC",temperature);
+      |                                                ~^     ~~~~~~~~~~~
+      |                                                 |     |
+      |                                                 int   double
+      |                                                %f
+../Src/main.c: In function 'I2C_start':
+../Src/main.c:259:9: warning: this 'while' clause does not guard... [-Wmisleading-indentation]
+  259 |         while (I2C_GetFlagStatus(I2C_MASTER_INSTANCE, I2C_FLAG_BUSY));
+      |         ^~~~~
+../Src/main.c:261:13: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'while'
+  261 |             I2C_GenerateSTART(I2C_MASTER_INSTANCE, ENABLE);
+      |             ^~~~~~~~~~~~~~~~~
+At top level:
+../Src/main.c:43:17: warning: 'Recive_Data' defined but not used [-Wunused-variable]
+   43 | static uint32_t Recive_Data[5];
+      |                 ^~~~~~~~~~~
+arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Assignment02.IoT303x.elf
+ 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+arm-none-eabi-objdump -h -S  Assignment02.IoT303x.elf  > "Assignment02.IoT303x.list"
+   text	   data	    bss	    dec	    hex	filename
+  22172	    108	   6604	  28884	   70d4	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+Finished building: Assignment02.IoT303x.list
+ 
+22:47:41 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:151:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  151 |                         sprintf(buffer1,"HUMI: %0.2d %%",humidity);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:151:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'double' [-Wformat=]
+  151 |                         sprintf(buffer1,"HUMI: %0.2d %%",humidity);
+      |                                                ~~~~^     ~~~~~~~~
+      |                                                    |     |
+      |                                                    int   double
+      |                                                %0.2f
+../Src/main.c:153:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'double' [-Wformat=]
+  153 |                         sprintf(buffer2,"TEMP: %d oC",temperature);
+      |                                                ~^     ~~~~~~~~~~~
+      |                                                 |     |
+      |                                                 int   double
+      |                                                %f
+At top level:
+../Src/main.c:43:17: warning: 'Recive_Data' defined but not used [-Wunused-variable]
+   43 | static uint32_t Recive_Data[5];
+      |                 ^~~~~~~~~~~
+arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Assignment02.IoT303x.elf
+ 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+arm-none-eabi-objdump -h -S  Assignment02.IoT303x.elf  > "Assignment02.IoT303x.list"
+   text	   data	    bss	    dec	    hex	filename
+  22172	    108	   6604	  28884	   70d4	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+Finished building: Assignment02.IoT303x.list
+ 
+22:50:14 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:115:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  115 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:115:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  115 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                                ~~~~^     ~~~~~~~~~~~~~~
+      |                                                    |                |
+      |                                                    int              uint32_t {aka long unsigned int}
+      |                                                %0.2ld
+../Src/main.c:117:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  117 |                         sprintf(buffer2,"TEMP: %d oC",Recive_Data[1]);
+      |                                                ~^     ~~~~~~~~~~~~~~
+      |                                                 |                |
+      |                                                 int              uint32_t {aka long unsigned int}
+      |                                                %ld
+arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Assignment02.IoT303x.elf
+ 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+arm-none-eabi-objdump -h -S  Assignment02.IoT303x.elf  > "Assignment02.IoT303x.list"
+   text	   data	    bss	    dec	    hex	filename
+  19776	    108	   6620	  26504	   6788	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+Finished building: Assignment02.IoT303x.list
+ 
+22:50:54 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:116:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  116 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:116:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  116 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                                ~~~~^     ~~~~~~~~~~~~~~
+      |                                                    |                |
+      |                                                    int              uint32_t {aka long unsigned int}
+      |                                                %0.2ld
+../Src/main.c:118:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  118 |                         sprintf(buffer2,"TEMP: %d oC",Recive_Data[1]);
+      |                                                ~^     ~~~~~~~~~~~~~~
+      |                                                 |                |
+      |                                                 int              uint32_t {aka long unsigned int}
+      |                                                %ld
+arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Assignment02.IoT303x.elf
+ 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+arm-none-eabi-objdump -h -S  Assignment02.IoT303x.elf  > "Assignment02.IoT303x.list"
+   text	   data	    bss	    dec	    hex	filename
+  19848	    108	   6620	  26576	   67d0	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+Finished building: Assignment02.IoT303x.list
+ 
+22:51:25 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:116:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  116 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:116:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  116 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                                ~~~~^     ~~~~~~~~~~~~~~
+      |                                                    |                |
+      |                                                    int              uint32_t {aka long unsigned int}
+      |                                                %0.2ld
+../Src/main.c:118:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  118 |                         sprintf(buffer2,"TEMP: %d oC",Recive_Data[1]);
+      |                                                ~^     ~~~~~~~~~~~~~~
+      |                                                 |                |
+      |                                                 int              uint32_t {aka long unsigned int}
+      |                                                %ld
+arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Assignment02.IoT303x.elf
+ 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+arm-none-eabi-objdump -h -S  Assignment02.IoT303x.elf  > "Assignment02.IoT303x.list"
+   text	   data	    bss	    dec	    hex	filename
+  19776	    108	   6620	  26504	   6788	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+Finished building: Assignment02.IoT303x.list
+ 
+22:52:42 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:116:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  116 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:116:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  116 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                                ~~~~^     ~~~~~~~~~~~~~~
+      |                                                    |                |
+      |                                                    int              uint32_t {aka long unsigned int}
+      |                                                %0.2ld
+../Src/main.c:118:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  118 |                         sprintf(buffer2,"TEMP: %d oC",Recive_Data[1]);
+      |                                                ~^     ~~~~~~~~~~~~~~
+      |                                                 |                |
+      |                                                 int              uint32_t {aka long unsigned int}
+      |                                                %ld
+arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Assignment02.IoT303x.elf
+ 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+arm-none-eabi-objdump -h -S  Assignment02.IoT303x.elf  > "Assignment02.IoT303x.list"
+   text	   data	    bss	    dec	    hex	filename
+  19848	    108	   6620	  26576	   67d0	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+Finished building: Assignment02.IoT303x.list
+ 
+22:57:15 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:116:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  116 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:116:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  116 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                                ~~~~^     ~~~~~~~~~~~~~~
+      |                                                    |                |
+      |                                                    int              uint32_t {aka long unsigned int}
+      |                                                %0.2ld
+../Src/main.c:118:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  118 |                         sprintf(buffer2,"TEMP: %d oC",Recive_Data[1]);
+      |                                                ~^     ~~~~~~~~~~~~~~
+      |                                                 |                |
+      |                                                 int              uint32_t {aka long unsigned int}
+      |                                                %ld
+arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Assignment02.IoT303x.elf
+ 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+arm-none-eabi-objdump -h -S  Assignment02.IoT303x.elf  > "Assignment02.IoT303x.list"
+   text	   data	    bss	    dec	    hex	filename
+  19856	    108	   6620	  26584	   67d8	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+Finished building: Assignment02.IoT303x.list
+ 
+23:00:49 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:116:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  116 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:116:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  116 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                                ~~~~^     ~~~~~~~~~~~~~~
+      |                                                    |                |
+      |                                                    int              uint32_t {aka long unsigned int}
+      |                                                %0.2ld
+../Src/main.c:118:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  118 |                         sprintf(buffer2,"TEMP: %d oC",Recive_Data[1]);
+      |                                                ~^     ~~~~~~~~~~~~~~
+      |                                                 |                |
+      |                                                 int              uint32_t {aka long unsigned int}
+      |                                                %ld
+arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Assignment02.IoT303x.elf
+ 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+arm-none-eabi-objdump -h -S  Assignment02.IoT303x.elf  > "Assignment02.IoT303x.list"
+   text	   data	    bss	    dec	    hex	filename
+  19856	    108	   6620	  26584	   67d8	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+Finished building: Assignment02.IoT303x.list
+ 
+23:01:42 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:116:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  116 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:116:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  116 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                                ~~~~^     ~~~~~~~~~~~~~~
+      |                                                    |                |
+      |                                                    int              uint32_t {aka long unsigned int}
+      |                                                %0.2ld
+../Src/main.c:118:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  118 |                         sprintf(buffer2,"TEMP: %d oC",Recive_Data[1]);
+      |                                                ~^     ~~~~~~~~~~~~~~
+      |                                                 |                |
+      |                                                 int              uint32_t {aka long unsigned int}
+      |                                                %ld
+arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Assignment02.IoT303x.elf
+ 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+arm-none-eabi-objdump -h -S  Assignment02.IoT303x.elf  > "Assignment02.IoT303x.list"
+   text	   data	    bss	    dec	    hex	filename
+  19848	    108	   6620	  26576	   67d0	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+Finished building: Assignment02.IoT303x.list
+ 
+23:06:35 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:115:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  115 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:115:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  115 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                                ~~~~^     ~~~~~~~~~~~~~~
+      |                                                    |                |
+      |                                                    int              uint32_t {aka long unsigned int}
+      |                                                %0.2ld
+../Src/main.c:117:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  117 |                         sprintf(buffer2,"TEMP: %d oC",Recive_Data[1]);
+      |                                                ~^     ~~~~~~~~~~~~~~
+      |                                                 |                |
+      |                                                 int              uint32_t {aka long unsigned int}
+      |                                                %ld
+arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Assignment02.IoT303x.elf
+ 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+arm-none-eabi-objdump -h -S  Assignment02.IoT303x.elf  > "Assignment02.IoT303x.list"
+   text	   data	    bss	    dec	    hex	filename
+  19748	    108	   6620	  26476	   676c	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+Finished building: Assignment02.IoT303x.list
+ 
+23:07:29 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:115:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  115 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:115:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  115 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                                ~~~~^     ~~~~~~~~~~~~~~
+      |                                                    |                |
+      |                                                    int              uint32_t {aka long unsigned int}
+      |                                                %0.2ld
+../Src/main.c:117:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  117 |                         sprintf(buffer2,"TEMP: %d oC",Recive_Data[1]);
+      |                                                ~^     ~~~~~~~~~~~~~~
+      |                                                 |                |
+      |                                                 int              uint32_t {aka long unsigned int}
+      |                                                %ld
+arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Assignment02.IoT303x.elf
+ 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+arm-none-eabi-objdump -h -S  Assignment02.IoT303x.elf  > "Assignment02.IoT303x.list"
+   text	   data	    bss	    dec	    hex	filename
+  19760	    108	   6620	  26488	   6778	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+Finished building: Assignment02.IoT303x.list
+ 
+23:08:06 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:115:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  115 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:115:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  115 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                                ~~~~^     ~~~~~~~~~~~~~~
+      |                                                    |                |
+      |                                                    int              uint32_t {aka long unsigned int}
+      |                                                %0.2ld
+../Src/main.c:117:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  117 |                         sprintf(buffer2,"TEMP: %d oC",Recive_Data[1]);
+      |                                                ~^     ~~~~~~~~~~~~~~
+      |                                                 |                |
+      |                                                 int              uint32_t {aka long unsigned int}
+      |                                                %ld
+arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Assignment02.IoT303x.elf
+ 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+arm-none-eabi-objdump -h -S  Assignment02.IoT303x.elf  > "Assignment02.IoT303x.list"
+   text	   data	    bss	    dec	    hex	filename
+  19772	    108	   6620	  26500	   6784	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+Finished building: Assignment02.IoT303x.list
+ 
+23:09:10 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:115:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  115 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:115:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  115 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                                ~~~~^     ~~~~~~~~~~~~~~
+      |                                                    |                |
+      |                                                    int              uint32_t {aka long unsigned int}
+      |                                                %0.2ld
+../Src/main.c:117:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  117 |                         sprintf(buffer2,"TEMP: %d oC",Recive_Data[1]);
+      |                                                ~^     ~~~~~~~~~~~~~~
+      |                                                 |                |
+      |                                                 int              uint32_t {aka long unsigned int}
+      |                                                %ld
+arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Assignment02.IoT303x.elf
+ 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+arm-none-eabi-objdump -h -S  Assignment02.IoT303x.elf  > "Assignment02.IoT303x.list"
+   text	   data	    bss	    dec	    hex	filename
+  19744	    108	   6620	  26472	   6768	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+Finished building: Assignment02.IoT303x.list
+ 
+23:12:18 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:115:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  115 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:115:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  115 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                                ~~~~^     ~~~~~~~~~~~~~~
+      |                                                    |                |
+      |                                                    int              uint32_t {aka long unsigned int}
+      |                                                %0.2ld
+../Src/main.c:117:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  117 |                         sprintf(buffer2,"TEMP: %d oC",Recive_Data[1]);
+      |                                                ~^     ~~~~~~~~~~~~~~
+      |                                                 |                |
+      |                                                 int              uint32_t {aka long unsigned int}
+      |                                                %ld
+arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Assignment02.IoT303x.elf
+ 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+arm-none-eabi-objdump -h -S  Assignment02.IoT303x.elf  > "Assignment02.IoT303x.list"
+   text	   data	    bss	    dec	    hex	filename
+  19768	    108	   6620	  26496	   6780	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+Finished building: Assignment02.IoT303x.list
+ 
+23:12:48 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:115:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  115 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:115:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  115 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                                ~~~~^     ~~~~~~~~~~~~~~
+      |                                                    |                |
+      |                                                    int              uint32_t {aka long unsigned int}
+      |                                                %0.2ld
+../Src/main.c:117:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  117 |                         sprintf(buffer2,"TEMP: %d oC",Recive_Data[1]);
+      |                                                ~^     ~~~~~~~~~~~~~~
+      |                                                 |                |
+      |                                                 int              uint32_t {aka long unsigned int}
+      |                                                %ld
+arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Assignment02.IoT303x.elf
+ 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+arm-none-eabi-objdump -h -S  Assignment02.IoT303x.elf  > "Assignment02.IoT303x.list"
+   text	   data	    bss	    dec	    hex	filename
+  19772	    108	   6620	  26500	   6784	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+Finished building: Assignment02.IoT303x.list
+ 
+23:14:22 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:115:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  115 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:115:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  115 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                                ~~~~^     ~~~~~~~~~~~~~~
+      |                                                    |                |
+      |                                                    int              uint32_t {aka long unsigned int}
+      |                                                %0.2ld
+../Src/main.c:117:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  117 |                         sprintf(buffer2,"TEMP: %d oC",Recive_Data[1]);
+      |                                                ~^     ~~~~~~~~~~~~~~
+      |                                                 |                |
+      |                                                 int              uint32_t {aka long unsigned int}
+      |                                                %ld
+arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Assignment02.IoT303x.elf
+ 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+arm-none-eabi-objdump -h -S  Assignment02.IoT303x.elf  > "Assignment02.IoT303x.list"
+   text	   data	    bss	    dec	    hex	filename
+  21840	    108	   6620	  28568	   6f98	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+Finished building: Assignment02.IoT303x.list
+ 
+23:19:01 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:115:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  115 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:115:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  115 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                                ~~~~^     ~~~~~~~~~~~~~~
+      |                                                    |                |
+      |                                                    int              uint32_t {aka long unsigned int}
+      |                                                %0.2ld
+../Src/main.c:117:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  117 |                         sprintf(buffer2,"TEMP: %d oC",Recive_Data[1]);
+      |                                                ~^     ~~~~~~~~~~~~~~
+      |                                                 |                |
+      |                                                 int              uint32_t {aka long unsigned int}
+      |                                                %ld
+arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Assignment02.IoT303x.elf
+ 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+arm-none-eabi-objdump -h -S  Assignment02.IoT303x.elf  > "Assignment02.IoT303x.list"
+   text	   data	    bss	    dec	    hex	filename
+  21840	    108	   6620	  28568	   6f98	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+Finished building: Assignment02.IoT303x.list
+ 
+23:19:42 **** Incremental Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/Assignment02.IoT303x/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:115:41: warning: '0' flag ignored with precision and '%d' gnu_printf format [-Wformat=]
+  115 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                         ^~~~~~~~~~~~~~~~
+../Src/main.c:115:52: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  115 |                         sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+      |                                                ~~~~^     ~~~~~~~~~~~~~~
+      |                                                    |                |
+      |                                                    int              uint32_t {aka long unsigned int}
+      |                                                %0.2ld
+../Src/main.c:117:49: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  117 |                         sprintf(buffer2,"TEMP: %d oC",Recive_Data[1]);
+      |                                                ~^     ~~~~~~~~~~~~~~
+      |                                                 |                |
+      |                                                 int              uint32_t {aka long unsigned int}
+      |                                                %ld
+arm-none-eabi-gcc -o "Assignment02.IoT303x.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\Assignment02.IoT303x\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Assignment02.IoT303x.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\Assignment02.IoT303x\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Assignment02.IoT303x.elf
+ 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+arm-none-eabi-objdump -h -S  Assignment02.IoT303x.elf  > "Assignment02.IoT303x.list"
+   text	   data	    bss	    dec	    hex	filename
+  21840	    108	   6620	  28568	   6f98	Assignment02.IoT303x.elf
 Finished building: default.size.stdout
  
 Finished building: Assignment02.IoT303x.list
