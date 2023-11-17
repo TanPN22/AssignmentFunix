@@ -1,13 +1,12 @@
- /* File name:
+ /* File name: Assignment01.IoT303x
  *
  * Description:
  *
  *
- * Last Changed By:  $Author: $
- * Revision:         $Revision: $
- * Last Changed:     $Date: $April 15, 2022
+ * Last Changed By:  $Author: Pham Nhat Tan
+ * Revision:         $Revision:
+ * Last Changed:     $Date: $Nov 15, 2023
  *
- * Code sample:
  ******************************************************************************/
 /******************************************************************************/
 /*                              INCLUDE FILES                                 */

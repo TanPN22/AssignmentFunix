@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="I2C"/>
+		<item key="selection" value="ucg_DrawString"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="ucg_DrawString"/>
+			<item value="void ucg_MyDrawString(ucg_t *ucg, ucg_int_t x, ucg_int_t y, uint8_t dir,char *str){"/>
+			<item value="(const char *)"/>
 			<item value="SPI"/>
 			<item value="Control"/>
 			<item value="pincon"/>
 			<item value="pin"/>
 			<item value="Caculate_time"/>
 			<item value="SYSCFG"/>
-			<item value="SysTick"/>
-			<item value="4"/>
-			<item value="3"/>
-			<item value="GPIOA"/>
 		</list>
 		<list key="replacehistory">
 			<item value="I2C"/>

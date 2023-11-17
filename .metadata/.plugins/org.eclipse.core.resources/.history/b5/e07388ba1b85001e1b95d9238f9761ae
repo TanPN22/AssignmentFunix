@@ -1,0 +1,89 @@
+ /* File name: Assignment02.IoT303x
+ *
+ * Description:
+ *
+ *
+ * Last Changed By:  Author: Pham Nhat Tan
+ * Revision:         Revision:
+ * Last Changed:     Date: Nov 17, 2023
+ *
+ ******************************************************************************/
+/******************************************************************************/
+/*                              INCLUDE FILES                                 */
+/******************************************************************************/
+#include <stdint.h>
+#include "timer.h"
+#include "Ucglib.h"
+#include "stm32f401re_gpio.h"
+#include "stm32f401re_rcc.h"
+#include <string.h>
+/******************************************************************************/
+/*                     PRIVATE TYPES and DEFINITIONS                         */
+/******************************************************************************/
+static ucg_t ucg;
+
+/******************************************************************************/
+/*                     EXPORTED TYPES and DEFINITIONS                         */
+/******************************************************************************/
+
+/******************************************************************************/
+/*                              PRIVATE DATA                                  */
+/******************************************************************************/
+
+/******************************************************************************/
+/*                              EXPORTED DATA                                 */
+/******************************************************************************/
+uint32_t Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent){
+	uint32_t TimeTotal;
+	if (TimeInit >= TimeCurrent){
+		TimeTotal = TimeCurrent - TimeInit;
+	}else {
+		TimeTotal = 0xFFFFFFFFU + TimeCurrent - TimeInit;
+	}
+	return TimeTotal;
+}
+
+void Delay(uint32_t ms){
+	uint32_t buff = GetMilSecTick();
+	while (Calculate_time(buff, GetMilSecTick()) <= ms);
+}
+/******************************************************************************/
+/*                            PRIVATE FUNCTIONS                               */
+/******************************************************************************/
+void AppInitCommon();
+void LCD_Print(char *buffer){
+	ucg_DrawString(&ucg, 60, 24, 0,buffer);
+}
+/******************************************************************************/
+/*                            EXPORTED FUNCTIONS                              */
+/******************************************************************************/
+int main(void)
+{
+	TimerInit();
+	SystemInit();
+	char buffer[256];
+	AppInitCommon();
+	int i = 0;
+	uint32_t Timecount = 0;
+    /* Loop forever */
+	while (1){
+		if (Calculate_time(Timecount, GetMilSecTick()) >= 1000){
+			i++;
+			Timecount = GetMilSecTick();
+		}
+		sprintf(buffer,"hien_%d",i);
+		ucg_DrawString(&ucg, 60, 24, 0,buffer);
+		processTimerScheduler();
+	}
+}
+/******************************************************************************/
+
+void AppInitCommon(){
+	TimerInit();
+	Ucglib4WireSWSPI_begin(&ucg, UCG_FONT_MODE_SOLID);
+	ucg_ClearScreen(&ucg);
+	ucg_SetFont(&ucg, ucg_font_ncenR12_hr);
+	ucg_SetColor(&ucg, 0, 255, 255, 255);
+	ucg_SetColor(&ucg, 1, 0, 0, 0);
+	ucg_SetRotate180(&ucg);
+}

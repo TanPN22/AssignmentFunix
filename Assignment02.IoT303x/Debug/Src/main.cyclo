@@ -1,0 +1,10 @@
+../Src/main.c:56:10:Calculate_time	2
+../Src/main.c:66:6:Delay	2
+../Src/main.c:85:5:main	2
+../Src/main.c:112:6:AppInitCommon	1
+../Src/main.c:122:6:I2C1_Init	1
+../Src/main.c:165:6:I2C_Start	7
+../Src/main.c:186:6:I2C_TransmitData	2
+../Src/main.c:192:9:I2C_Recevie_nack	2
+../Src/main.c:204:9:I2C_Recevie_ack	2
+../Src/main.c:217:6:I2C_Stop	1
