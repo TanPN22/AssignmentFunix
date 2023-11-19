@@ -1,0 +1,251 @@
+ /* File name: Lab 7.1 / 7.2 / 7.3
+ *
+ * Description:
+ *
+ *
+ * Last Changed By:  $Author: $Pham Nhat Tan
+ * Revision:         $Revision: $
+ * Last Changed:     $Date: $Nov 19, 2023
+ *
+ * Code sample:
+ ******************************************************************************/
+/******************************************************************************/
+/*                              INCLUDE FILES                                 */
+/******************************************************************************/
+#include "stdio.h"
+#include "stm32f401re_gpio.h"
+#include "stm32f401re_rcc.h"
+#include "stm32f401re_tim.h"
+#include "misc.h"
+#include "stm32f401re_usart.h"
+/******************************************************************************/
+/*                     PRIVATE TYPES and DEFINITIONS                         */
+/******************************************************************************/
+#define GPIO_PIN_SET 					1
+#define GPIO_PIN_RESET 					0
+
+#define BUTTON_GPIO_PORT 				GPIOB
+#define BUTTON_GPIO_PIN					GPIO_Pin_3
+
+#define BUTTON_GPIO_RCC					RCC_AHB1Periph_GPIOB
+
+#define TIM_RCC							RCC_APB1Periph_TIM2
+#define TIM_INSTANCE					TIM2
+
+#define TIM_PRESCALE 					41999
+#define TIM_PERIOD						0xFFFF
+
+#define Tim_Update						(TIM2->CNT)
+#define TimLimit_SendData				1000
+
+#define USART_GPIO_PORT					GPIOA
+#define USART_GPIO_PIN					GPIO_Pin_2
+#define USART_GPIO_RCC					RCC_AHB1Periph_GPIOA
+#define USART_RCC						RCC_APB1Periph_USART2
+
+
+/******************************************************************************/
+/*                     EXPORTED TYPES and DEFINITIONS                         */
+/******************************************************************************/
+uint16_t Number_Press = 0;
+uint16_t Tim_Rising;
+uint8_t Status;
+/******************************************************************************/
+/*                              PRIVATE DATA                                  */
+/******************************************************************************/
+
+/******************************************************************************/
+/*                              EXPORTED DATA                                 */
+/******************************************************************************/
+
+/******************************************************************************/
+/*                            PRIVATE FUNCTIONS                               */
+/******************************************************************************/
+void TimPWM_Init(void);
+static void Led_ControlPWM(uint8_t dutyCycle);
+//static void Led_Init(void);
+//void Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status);
+//void Green_control(uint8_t status);
+//void LedGreen_blink(uint8_t NumBlink);
+void Delay(uint32_t ms);
+
+/******************************************************************************/
+/*                            EXPORTED FUNCTIONS                              */
+/******************************************************************************/
+int main(void)
+{
+	TimPWM_Init();
+	SystemCoreClockUpdate();
+
+	while (1){
+		Led_ControlPWM(50);
+   }
+}
+/******************************************************************************/
+void TimPWM_Init(void){
+	//Init typedef
+	TIM_TimeBaseInitTypeDef TIM_Initstructe;
+	GPIO_InitTypeDef		GPIO_Initstructe;
+	TIM_ICInitTypeDef		Tim_ICInittructure;
+	NVIC_InitTypeDef		NVIC_Initstructe;
+
+	//Cau hinh chan GPIO
+	RCC_AHB1PeriphClockCmd(BUTTON_GPIO_RCC, ENABLE);
+
+	GPIO_Initstructe.GPIO_Mode = GPIO_Mode_AF;
+	GPIO_Initstructe.GPIO_OType = GPIO_OType_PP;
+	GPIO_Initstructe.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_Initstructe.GPIO_Speed = GPIO_Speed_50MHz;
+
+	GPIO_PinAFConfig(GPIOB, GPIO_PinSource3, GPIO_AF_TIM2);
+
+	GPIO_Initstructe.GPIO_Pin = GPIO_Pin_3;
+	GPIO_Init(GPIOB, &GPIO_Initstructe);
+
+	//Cau hinh Timer basic
+	RCC_APB2PeriphClockCmd(TIM_RCC, ENABLE);
+
+	TIM_Initstructe.TIM_CounterMode = TIM_CounterMode_Up;
+	TIM_Initstructe.TIM_ClockDivision = 0;
+	TIM_Initstructe.TIM_Prescaler = TIM_PRESCALE;
+	TIM_Initstructe.TIM_Period = TIM_PERIOD;
+
+	TIM_TimeBaseInit(TIM_INSTANCE, &TIM_Initstructe);
+
+	//Cau hinh IC
+	Tim_ICInittructure.TIM_Channel = TIM_Channel_2;
+	Tim_ICInittructure.TIM_ICFilter = 0x0;
+	Tim_ICInittructure.TIM_ICPolarity = TIM_ICPolarity_BothEdge;
+	Tim_ICInittructure.TIM_ICPrescaler = TIM_ICPSC_DIV2;
+	Tim_ICInittructure.TIM_ICSelection = TIM_ICSelection_DirectTI;
+
+	TIM_ICInit(TIM_INSTANCE, &Tim_ICInittructure);
+
+	TIM_Cmd(TIM_INSTANCE, ENABLE);
+
+	//Khoi tao ngat cho timer
+	TIM_ITConfig(TIM_INSTANCE, TIM_IT_CC2, ENABLE);
+
+	NVIC_Initstructe.NVIC_IRQChannel = TIM2_IRQn;
+	NVIC_Initstructe.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Initstructe.NVIC_IRQChannelPreemptionPriority = 0;
+	NVIC_Initstructe.NVIC_IRQChannelSubPriority = 0;
+
+	NVIC_Init(&NVIC_Initstructe);
+
+}
+
+void TIM2_IRQHandler(){
+
+}
+
+static
+void Check_Tim_Press(){
+	static uint8_t Status1 = 0;
+	Status1 = !Status1;
+	if (Status1 == 1){
+		Number_Press ++;
+	}else if (Status1 == 0){
+		Tim_Rising = TIM_GetCapture2(TIM_INSTANCE);
+		Status = 1;
+	}
+}
+
+static
+void Send_NumberPress(void){
+	uint32_t Tim_SendData = 0;
+	if (Status == 1){
+		if (Tim_Update < Tim_Rising){
+			Tim_SendData = (0xffff + Tim_Update) - Tim_Rising;
+		}
+		else {
+			Tim_SendData = Tim_Update - Tim_Rising;
+		}
+		if (Tim_SendData > TimLimit_SendData){
+			USART_SendData(USART2, Number_Press);
+			Status = 0;
+			Number_Press = 0;
+		}
+	}
+}
+
+void USART2_Init(){
+	GPIO_InitTypeDef		GPIO_InitStructe;
+	USART_InitTypeDef		USART_InitStructe;
+
+	//Cap clock
+	RCC_AHB1PeriphClockCmd(USART_GPIO_RCC, ENABLE);
+	RCC_APB1PeriphClockCmd(USART_RCC, ENABLE);
+
+	//Cau hinh chan GPIO
+	GPIO_InitStructe.GPIO_Mode = GPIO_Mode_AF;
+	GPIO_InitStructe.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructe.GPIO_PuPd = GPIO_PuPd_UP;
+	GPIO_InitStructe.GPIO_Speed = GPIO_Speed_50MHz;
+
+	GPIO_PinAFConfig(USART_GPIO_PORT, GPIO_PinSource2, GPIO_AF_USART2);
+	GPIO_InitStructe.GPIO_Pin = USART_GPIO_PIN;
+	GPIO_Init(USART_GPIO_PORT, &GPIO_InitStructe);
+
+	//Cau hinh USART
+	USART_InitStructe.USART_BaudRate = 9600;
+	USART_InitStructe.USART_WordLength = USART_WordLength_8b;
+	USART_InitStructe.USART_StopBits = USART_StopBits_1;
+	USART_InitStructe.USART_Parity = USART_Parity_No;
+	USART_InitStructe.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+	USART_InitStructe.USART_Mode = USART_Mode_Tx;
+
+	USART_Init(USART2, &USART_InitStructe);
+
+	USART_Cmd(USART2, ENABLE);
+
+}
+//static void Led_Init(void){
+//	//Khai bao kieu du lieu
+//	GPIO_InitTypeDef GPIO_Initstruct;
+//
+//	//Bat block cho GPIOA va GPIOB
+//	RCC_AHB1PeriphClockCmd(LED_GPIO_RCC, ENABLE);
+//
+//	//Khoi tao cac gia tri ban dau cho GREEN1
+//	GPIO_Initstruct.GPIO_Pin = LEDGREEN1_GPIO_PIN;
+//	GPIO_Initstruct.GPIO_Mode = GPIO_Mode_OUT;
+//	GPIO_Initstruct.GPIO_Speed = GPIO_Speed_50MHz;
+//	GPIO_Initstruct.GPIO_OType = GPIO_OType_PP;
+//	GPIO_Init(LEDGREEN1_GPIO_PORT, &GPIO_Initstruct);
+//
+//	//Khoi tao cac gia tri ban dau cho GREEN2
+//	GPIO_Initstruct.GPIO_Pin = LEDGREEN2_GPIO_PIN;
+//	GPIO_Initstruct.GPIO_Mode = GPIO_Mode_OUT;
+//	GPIO_Initstruct.GPIO_Speed = GPIO_Speed_50MHz;
+//	GPIO_Initstruct.GPIO_OType = GPIO_OType_PP;
+//	GPIO_Init(LEDGREEN2_GPIO_PORT, &GPIO_Initstruct);
+//
+//}
+//
+//void Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status){
+//	if (status == GPIO_PIN_SET){
+//		GPIO_SetBits(GPIOx, GPIO_Pin);
+//	}else if(status == GPIO_PIN_RESET){
+//		GPIO_ResetBits(GPIOx, GPIO_Pin);
+//	}
+//}
+
+//void Green_control(uint8_t status){
+//	if (status == GPIO_PIN_SET){
+//		Led_control(LEDGREEN1_GPIO_PORT, LEDGREEN1_GPIO_PIN, GPIO_PIN_SET);
+//		Led_control(LEDGREEN2_GPIO_PORT, LEDGREEN2_GPIO_PIN, GPIO_PIN_SET);
+//	}else if(status == GPIO_PIN_RESET){
+//		Led_control(LEDGREEN1_GPIO_PORT, LEDGREEN1_GPIO_PIN, GPIO_PIN_RESET);
+//		Led_control(LEDGREEN2_GPIO_PORT, LEDGREEN2_GPIO_PIN, GPIO_PIN_RESET);
+//	}
+//}
+//
+//void LedGreen_blink(uint8_t NumBlink){
+//	for (int i = 0; i < NumBlink; i++){
+//		Green_control(1);
+//		Delay(100);
+//		Green_control(0);
+//		Delay(100);
+//	}
+//}

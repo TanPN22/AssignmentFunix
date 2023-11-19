@@ -1,0 +1,98 @@
+ /* File name: Lab 7.1 / 7.2 / 7.3
+ *
+ * Description:
+ *
+ *
+ * Last Changed By:  $Author: $Pham Nhat Tan
+ * Revision:         $Revision: $
+ * Last Changed:     $Date: $Nov 19, 2023
+ *
+ * Code sample:
+ ******************************************************************************/
+/******************************************************************************/
+/*                              INCLUDE FILES                                 */
+/******************************************************************************/
+#include "stdio.h"
+#include "stm32f401re_gpio.h"
+#include "stm32f401re_rcc.h"
+#include "stm32f401re_tim.h"
+/******************************************************************************/
+/*                     PRIVATE TYPES and DEFINITIONS                         */
+/******************************************************************************/
+#define GPIO_PIN_SET 				1
+#define GPIO_PIN_RESET 				0
+
+#define LEDGREEN1_GPIO_PORT 			GPIOA
+#define LEDGREEN1_GPIO_PIN				GPIO_Pin_0
+
+#define LEDGREEN2_GPIO_PORT 			GPIOA
+#define LEDGREEN2_GPIO_PIN				GPIO_Pin_11
+
+#define LED_GPIO_RCC					RCC_AHB1Periph_GPIOA
+
+#define SYSCFG_GPIO_RCC					RCC_APB2Periph_SYSCFG
+
+/******************************************************************************/
+/*                     EXPORTED TYPES and DEFINITIONS                         */
+/******************************************************************************/
+
+
+/******************************************************************************/
+/*                              PRIVATE DATA                                  */
+/******************************************************************************/
+
+/******************************************************************************/
+/*                              EXPORTED DATA                                 */
+/******************************************************************************/
+
+/******************************************************************************/
+/*                            PRIVATE FUNCTIONS                               */
+/******************************************************************************/
+
+/******************************************************************************/
+/*                            EXPORTED FUNCTIONS                              */
+/******************************************************************************/
+int main(void)
+{
+   while (1){
+
+   }
+}
+/******************************************************************************/
+void Tim_Init(){
+
+}
+
+static void Led_Init(void){
+	//Khai bao kieu du lieu
+	GPIO_InitTypeDef GPIO_Initstruct;
+
+	//Bat block cho GPIOA va GPIOB
+	RCC_AHB1PeriphClockCmd(LED_GPIOA_RCC, ENABLE);
+	RCC_AHB1PeriphClockCmd(LED_GPIOB_RCC, ENABLE);
+
+	//Khoi tao cac gia tri ban dau cho GREEN1
+	GPIO_Initstruct.GPIO_Pin = LEDGREEN1_GPIO_PIN;
+	GPIO_Initstruct.GPIO_Mode = GPIO_Mode_OUT;
+	GPIO_Initstruct.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Initstruct.GPIO_OType = GPIO_OType_PP;
+	GPIO_Init(LEDGREEN1_GPIO_PORT, &GPIO_Initstruct);
+
+	//Khoi tao cac gia tri ban dau cho GREEN2
+	GPIO_Initstruct.GPIO_Pin = LEDGREEN2_GPIO_PIN;
+	GPIO_Initstruct.GPIO_Mode = GPIO_Mode_OUT;
+	GPIO_Initstruct.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Initstruct.GPIO_OType = GPIO_OType_PP;
+	GPIO_Init(LEDGREEN2_GPIO_PORT, &GPIO_Initstruct);
+
+}
+
+
+void LedGreen_blink(uint8_t NumBlink){
+	for (int i = 0; i < NumBlink; i++){
+		Green_control(1);
+		Delay(100);
+		Green_control(0);
+		Delay(100);
+	}
+}

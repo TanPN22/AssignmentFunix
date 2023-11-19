@@ -1,0 +1,6 @@
+../Src/main.c:74:5:main	1
+../Src/main.c:85:6:TimIC_Init	1
+../Src/main.c:138:6:TIM2_IRQHandler	1
+../Src/main.c:143:6:Check_Tim_Press	3
+../Src/main.c:155:6:Send_NumberPress	4
+../Src/main.c:172:6:USART2_Init	1
