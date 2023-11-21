@@ -93,3 +93,31 @@ Finished building: default.size.stdout
  
 Finished building: LineDetecter.list
  
+15:31:08 **** Incremental Build of configuration Debug for project LineDetecter ****
+make -j16 all 
+arm-none-eabi-size   LineDetecter.elf 
+   text	   data	    bss	    dec	    hex	filename
+   5588	     44	   1980	   7612	   1dbc	LineDetecter.elf
+Finished building: default.size.stdout
+ 
+15:33:52 **** Build of configuration Debug for project Assignment02.IoT303x ****
+make -j16 all 
+arm-none-eabi-size   Assignment02.IoT303x.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21840	    108	   6620	  28568	   6f98	Assignment02.IoT303x.elf
+Finished building: default.size.stdout
+ 
+15:36:24 **** Build of configuration Debug for project Assignment01.IoT303x ****
+make -j16 all 
+arm-none-eabi-size   Assignment01.IoT303x.elf 
+   text	   data	    bss	    dec	    hex	filename
+   5676	     44	   1980	   7700	   1e14	Assignment01.IoT303x.elf
+Finished building: default.size.stdout
+ 
+15:38:26 **** Build of configuration Debug for project Assignment04.IoT303x ****
+make -j16 all 
+arm-none-eabi-size   Assignment04.IoT303x.elf 
+   text	   data	    bss	    dec	    hex	filename
+   5368	     44	   1972	   7384	   1cd8	Assignment04.IoT303x.elf
+Finished building: default.size.stdout
+ 
