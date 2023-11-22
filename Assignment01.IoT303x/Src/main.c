@@ -23,8 +23,8 @@
 /******************************************************************************/
 /*                     PRIVATE TYPES and DEFINITIONS                         */
 /******************************************************************************/
-#define GPIO_PIN_SET 				1
-#define GPIO_PIN_RESET 				0
+#define GPIO_PIN_SET 					1
+#define GPIO_PIN_RESET 					0
 
 #define LEDGREEN1_GPIO_PORT 			GPIOA
 #define LEDGREEN1_GPIO_PIN				GPIO_Pin_0
@@ -84,42 +84,23 @@ uint8_t					BuffB4  = 0		   ;
 /******************************************************************************/
 /*                            PRIVATE FUNCTIONS                               */
 /******************************************************************************/
-static void Button_IT_Init();
-static void Led_Init();
-static void Buzzer_Init(void);
-static void Buzzer_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status);
-static uint8_t Button_GetLogic(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin);
-void EXTI0_IRQHandler(void);
-void EXTI4_IRQHandler(void);
-void EXTI3_IRQHandler(void);
-void Blue_control(uint8_t status);
-void Green_control(uint8_t status);
-void Red_control(uint8_t status);
-void Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status);
-void Delay(uint32_t ms);
-uint32_t Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent);
+static void 		Button_IT_Init();
+static void 		Led_Init();
+static void 		Buzzer_Init(void);
+static void 		Buzzer_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status);
+static uint8_t		Button_GetLogic(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin);
+void 				EXTI0_IRQHandler(void);
+void 				EXTI4_IRQHandler(void);
+void 				EXTI3_IRQHandler(void);
+void 				Blue_control(uint8_t status);
+void 				Green_control(uint8_t status);
+void 				Red_control(uint8_t status);
+void 				Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status);
+void 				Delay(uint32_t ms);
+void 				LedGreen_blink(uint8_t NumBlink);
+void 				Buzzer_blink(uint8_t BuzzerBlink);
 
-/******************************************************************************/
-/*                            EXPORTED FUNCTIONS                               */
-/******************************************************************************/
-void LedGreen_blink(uint8_t NumBlink){
-	for (int i = 0; i < NumBlink; i++){
-		Green_control(1);
-		Delay(100);
-		Green_control(0);
-		Delay(100);
-	}
-}
-
-void Buzzer_blink(uint8_t BuzzerBlink){
-	for (int i = 0; i < BuzzerBlink; i++){
-		Buzzer_control(BUZZER_GPIO_PORT, BUZZER_GPIO_PIN, GPIO_PIN_SET);
-		Delay(100);
-		Buzzer_control(BUZZER_GPIO_PORT, BUZZER_GPIO_PIN, GPIO_PIN_RESET);
-		Delay(100);
-	}
-}
-
+uint32_t 			Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent);
 
 /******************************************************************************/
 /*                            EXPORTED FUNCTIONS                              */
@@ -128,12 +109,7 @@ void Buzzer_blink(uint8_t BuzzerBlink){
 int main(void)
 {
 	//--------------Init cac gia tri-------------
-	Led_Init();
-	Button_IT_Init();
-	Buzzer_Init();
-	SystemCoreClockUpdate();
-	TimerInit();
-	SystemInit();
+
 
 	//-------------Khoi dong---------------------
 	LedGreen_blink(4);
@@ -172,6 +148,27 @@ int main(void)
 	}
 }
 /******************************************************************************/
+void Appinit_Common(){
+	//Khoi tao Led
+	Led_Init();
+
+	//Khoi tao Button
+	Button_IT_Init();
+
+	//Khoi tao coi
+	Buzzer_Init();
+
+	//Khoi tao system clock
+	SystemCoreClockUpdate();
+
+	//Khoi tao Timer
+	TimerInit();
+
+	//Khoi tao system
+	SystemInit();
+}
+
+//Tinh toan thoi gian
 uint32_t Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent){
 	uint32_t TimeTotal;
 	if (TimeInit >= TimeCurrent){
@@ -182,11 +179,13 @@ uint32_t Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent){
 	return TimeTotal;
 }
 
+//Khoi tao ham Delay
 void Delay(uint32_t ms){
 	uint32_t buff = GetMilSecTick();
 	while (Calculate_time(buff, GetMilSecTick()) <= ms);
 }
 
+//Khoi tao ham led
 static void Led_Init(void){
 	//Khai bao kieu du lieu
 	GPIO_InitTypeDef GPIO_Initstruct;
@@ -327,6 +326,15 @@ static void Button_IT_Init(void){
 	NVIC_Init(&NVIC_Initstruct2);
 }
 
+void Buzzer_blink(uint8_t BuzzerBlink){
+	for (int i = 0; i < BuzzerBlink; i++){
+		Buzzer_control(BUZZER_GPIO_PORT, BUZZER_GPIO_PIN, GPIO_PIN_SET);
+		Delay(100);
+		Buzzer_control(BUZZER_GPIO_PORT, BUZZER_GPIO_PIN, GPIO_PIN_RESET);
+		Delay(100);
+	}
+}
+
 static void Buzzer_Init(void){
 	//Khai bao kieu du lieu
 	GPIO_InitTypeDef GPIO_Initstruct;
@@ -348,6 +356,15 @@ static void Buzzer_Init(void){
 
 	//Cau hinh chan cho GPIO
 	GPIO_Init(BUZZER_GPIO_PORT, &GPIO_Initstruct);
+}
+
+void LedGreen_blink(uint8_t NumBlink){
+	for (int i = 0; i < NumBlink; i++){
+		Green_control(1);
+		Delay(100);
+		Green_control(0);
+		Delay(100);
+	}
 }
 
 static void Buzzer_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status){

@@ -1,10 +1,17 @@
-15:31:08 **** Incremental Build of configuration Debug for project LineDetecter ****
+08:28:37 **** Incremental Build of configuration Debug for project LineDetecter ****
 make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F401RE -DSTM32 -DSTM32F401RETx -DSTM32F4 -c -I../Inc -I"D:/DH/Lumi/Lab/LineDetecter/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/Lab/LineDetecter/SDK_1.0.3_NUCLEO-F401RE/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/Lab/LineDetecter/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/button" -I"D:/DH/Lumi/Lab/LineDetecter/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/buzzer" -I"D:/DH/Lumi/Lab/LineDetecter/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/led" -I"D:/DH/Lumi/Lab/LineDetecter/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/rtos" -I"D:/DH/Lumi/Lab/LineDetecter/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/sensor" -I"D:/DH/Lumi/Lab/LineDetecter/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/serial" -I"D:/DH/Lumi/Lab/LineDetecter/SDK_1.0.3_NUCLEO-F401RE/shared/Middle/ucglib" -I"D:/DH/Lumi/Lab/LineDetecter/SDK_1.0.3_NUCLEO-F401RE/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+arm-none-eabi-gcc -o "LineDetecter.elf" @"objects.list"  -lLibraries -mcpu=cortex-m4 -T"D:\DH\Lumi\Lab\LineDetecter\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LineDetecter.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\Lab\LineDetecter\SDK_1.0.3_NUCLEO-F401RE\lib_stm" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: LineDetecter.elf
+ 
 arm-none-eabi-size   LineDetecter.elf 
+arm-none-eabi-objdump -h -S  LineDetecter.elf  > "LineDetecter.list"
    text	   data	    bss	    dec	    hex	filename
    5588	     44	   1980	   7612	   1dbc	LineDetecter.elf
 Finished building: default.size.stdout
  
+Finished building: LineDetecter.list
+ 
 
-15:31:09 Build Finished. 0 errors, 0 warnings. (took 346ms)
+08:28:39 Build Finished. 0 errors, 0 warnings. (took 1s.841ms)
 

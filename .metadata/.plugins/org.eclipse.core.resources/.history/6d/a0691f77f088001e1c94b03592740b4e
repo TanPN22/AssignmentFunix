@@ -1,0 +1,507 @@
+/*******************************************************************************
+ *
+ * Copyright (c) 2020
+ * Lumi, JSC.
+ * All Rights Reserved
+ *
+ * Description: Assignment 1
+ *
+ * Author: Developer embedded team
+ *
+ * Last Changed By:  $Author: HoangNH $
+ * Revision:         $Revision: 1.0 $
+ * Last Changed:     $Date: 10/7/2020 $
+ *
+ ******************************************************************************/
+#include "system_stm32f0xx.h"
+#include "timer.h"
+#include "eventman.h"
+#include "led.h"
+#include "melody.h"
+#include "eventbutton.h"
+#include "button.h"
+#include "gui.h"
+#include "lcd.h"
+#include "optical_sensor.h"
+#include "motor.h"
+#include "encoder.h"
+#include "utilities.h"
+#include "serial.h"
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#define IRSENSOR_PERIOD_SCAN		10  	// ms
+#define MOTORCTRL_PERIOD_SCAN	    50 	 	// ms
+
+#define IRSENSOR_ADC_THRESHOLD      60 		// cnt
+#define IRSENSOR_NUM_FILTER			10 		// sample
+
+/*! @brief Line State */
+#define ALL							0x00
+#define NONE						0x7F
+
+/*! @brief Simple Line State */
+#define L3_SIMPLE					0x3F	// 0111111
+#define L2_SIMPLE					0x5F	// 1011111
+#define L1_SIMPLE					0x6F	// 1101111
+#define CENTER_SIMPLE				0x77	// 1110111
+#define R1_SIMPLE					0x7B	// 1111011
+#define R2_SIMPLE					0x7D	// 1111101
+#define R3_SIMPLE					0x7E	// 1111110
+
+/*! @brief Dual Line State */
+#define L_CENTER_DUAL				0x67	// 1100111
+#define L2_DUAL						0x4F	// 1001111
+#define L3_DUAL						0x1F	// 0011111
+
+#define R_CENTER_DUAL				0x73	// 1110011
+#define R2_DUAL						0x79	// 1111001
+#define R3_DUAL						0x7C	// 1111100
+
+/*! @brief Events APIs */
+typedef enum {
+    EVENT_EMPTY,
+    EVENT_APP_INIT,
+    EVENT_APP_FLUSHMEM_READY,
+} event_api_t, *event_api_p;
+
+typedef enum {
+    STATE_APP_STARTUP,
+    STATE_APP_IDLE,
+    STATE_APP_RESET
+} state_app_t;
+
+/* Private function ----------------------------------------------------------*/
+static void AppInitCommon(void);
+static void SetStateApp(state_app_t state);
+static state_app_t GetStateApp(void);
+static void AppStateManager(uint8_t event);
+static void DeviceStateMachine(uint8_t event);
+
+//static void Sensor_Filter(void);
+static void ControlRobot_Direction(void *arg);
+static void LineCompare(void *arg);
+static void Filter_Line_White(void);
+static void Filter_Line_Black(void);
+/* Private variables ---------------------------------------------------------*/
+static state_app_t eCurrentState;
+static SSwTimer idTimerSensorScan = NO_TIMER;
+static SSwTimer idTimerDirectionScan = NO_TIMER;
+
+volatile uint16_t adc_value_line0[7];
+volatile uint16_t adc_value_line1[7];
+uint16_t ADC_Value[7];
+static uint8_t lineSensor = 0;
+
+//volatile uint32_t encoderL_speed;
+//volatile uint32_t encoderR_speed;
+
+//static int32_t set_speed = 500;
+
+int main(void)
+{
+    // Initialize modules
+    AppInitCommon();
+    SetStateApp(STATE_APP_STARTUP);
+    EventSchedulerAdd(EVENT_APP_INIT);
+
+    while (1)
+    {
+        /* Process tasks */
+        processTimerScheduler();
+        processEventScheduler();
+        ADC_Value[0] = OpticalSensor_MeasureUseDMAMode(0);
+        ADC_Value[1] = OpticalSensor_MeasureUseDMAMode(1);
+        ADC_Value[2] = OpticalSensor_MeasureUseDMAMode(2);
+        ADC_Value[3] = OpticalSensor_MeasureUseDMAMode(3);
+        ADC_Value[4] = OpticalSensor_MeasureUseDMAMode(4);
+        ADC_Value[5] = OpticalSensor_MeasureUseDMAMode(5);
+        ADC_Value[6] = OpticalSensor_MeasureUseDMAMode(6);
+    }
+}
+
+/**
+ * @func   AppInitCommon
+ * @brief  Initialize common application
+ * @param  None
+ * @retval None
+ */
+static
+void AppInitCommon(void)
+{
+    // Initializes system clock 48 MHz
+	SystemInit();
+    SystemCoreClockUpdate();
+
+    // Initializes system tick
+    TimerInit();
+
+    // Initializes scheduler event
+    EventSchedulerInit(AppStateManager);
+
+    // Initializes buttons
+    EventButton_Init();
+
+    // Initializes buzzer
+    BuzzerControl_Init();
+
+    // Initializes led
+    LedControl_Init();
+
+    // Initializes IR sensor
+    OpticalSensor_Init(ADC_READ_MODE_DMA);
+
+    // Initializes lcd
+    LCD_Init();
+    LCD_direction(1);
+
+    // Initializes motor
+    MotorControl_Init();
+
+    // Initializes encoder
+    Encoder_Init();
+
+    // Initializes UART peripheral
+	Serial_Init();
+}
+
+/**
+ * @func   LoadConfiguration
+ * @brief  Event start up of application
+ * @param  None
+ * @retval None
+ */
+void
+LoadConfiguration(void)
+{
+}
+
+/**
+ * @func   AppStateManager
+ * @brief  Manager state application
+ * @param  None
+ * @retval None
+ */
+static
+void AppStateManager(
+    uint8_t event
+) {
+    switch (GetStateApp())
+    {
+        case STATE_APP_STARTUP:
+            if (event == EVENT_APP_INIT)
+            {
+            	// Load configuration
+                LoadConfiguration();
+                SetStateApp(STATE_APP_IDLE);
+            }
+            break;
+
+        case STATE_APP_IDLE:
+            DeviceStateMachine(event);
+            break;
+
+        case STATE_APP_RESET:
+            break;
+
+        default:
+            break;
+    }
+}
+
+/**
+ * @func   SetStateApp
+ * @brief  Set state of application
+ * @param  state: State of application
+ * @retval None
+ */
+static
+void SetStateApp(
+    state_app_t state
+) {
+    /* Set state of application */
+    eCurrentState = state;
+}
+
+/**
+ * @func   GetStateApp
+ * @brief  Get state of application
+ * @param  None
+ * @retval State of application
+ */
+static
+state_app_t GetStateApp(void) {
+    /* Return state of application */
+    return eCurrentState;
+}
+
+/**
+ * @func   DeviceStateMachine
+ * @brief  State machine of the device
+ * @param  event
+ * @retval None
+ */
+void
+DeviceStateMachine(
+    uint8_t event
+) {
+    switch (event)
+    {
+		case EVENT_OF_BUTTON_BACK_PRESS_LOGIC:
+			Filter_Line_White();
+			break;
+
+        case EVENT_OF_BUTTON_NEXT_PRESS_LOGIC:
+        	Filter_Line_Black();
+            break;
+
+        case EVENT_OF_BUTTON_ENTER_PRESS_LOGIC:
+
+
+
+
+
+//        	if(idTimerSensorScan != NO_TIMER){
+//				TimerStop(idTimerSensorScan);
+//				idTimerSensorScan = NO_TIMER;
+//			}
+//
+//			idTimerSensorScan = TimerStart("lineCompare", \
+//					                        IRSENSOR_PERIOD_SCAN, \
+//											TIMER_REPEAT_FOREVER, \
+//											LineCompare, \
+//											NULL);
+//            break;
+//
+//        case EVENT_OF_BUTTON_ENTER_PRESS_2_TIMES:
+//			if(idTimerDirectionScan != NO_TIMER){
+//				TimerStop(idTimerDirectionScan);
+//				idTimerDirectionScan = NO_TIMER;
+//			}
+//
+//			idTimerDirectionScan = TimerStart("ControlRobot_Direction", \
+//					                          MOTORCTRL_PERIOD_SCAN, \
+//											  TIMER_REPEAT_FOREVER, \
+//											  ControlRobot_Direction, \
+//											  NULL);
+			break;
+
+//        case EVENT_OF_BUTTON_ENTER_PRESS_3_TIMES:
+//        	MotorControl_ReverseRotating(MOTOR_ID_R, 0);
+//        	MotorControl_ReverseRotating(MOTOR_ID_L, 0);
+//			break;
+//
+//        case EVENT_OF_BUTTON_ENTER_PRESS_4_TIMES:
+//        	break;
+//
+        case EVENT_OF_BUTTON_BACK_PRESS_2_TIMES:
+			MotorControl_ForwardRotating(MOTOR_ID_R, 30);
+			MotorControl_ForwardRotating(MOTOR_ID_L, 30);
+        	break;
+
+        case EVENT_OF_BUTTON_NEXT_PRESS_2_TIMES:
+			break;
+
+        default:
+            break;
+    }
+}
+
+/**
+ * @func   Filter_Line_White
+ * @brief  Sampling White line
+ * @param  None
+ * @retval None
+ */
+static
+void Filter_Line_White(void)
+{
+	uint32_t sample[IR_SENSOR_MAX] = {0};
+
+	for(uint8_t i = 0; i < IR_SENSOR_MAX; i++)
+	{
+		for(uint8_t j = 0; j < IRSENSOR_NUM_FILTER; j++)
+		{
+			sample[i] += OpticalSensor_MeasureUseDMAMode(i);
+
+		}
+		adc_value_line0[i] = sample[i] / IRSENSOR_NUM_FILTER;
+	}
+}
+
+/**
+ * @func   Filter_Line_Black
+ * @brief  Sampling Black line
+ * @param  None
+ * @retval None
+ */
+static
+void Filter_Line_Black(void)
+{
+	uint32_t sample[IR_SENSOR_MAX] = {0};
+
+	for(uint8_t i = 0; i < IR_SENSOR_MAX; i++)
+	{
+		for(uint8_t j = 0; j < IRSENSOR_NUM_FILTER; j++)
+		{
+			sample[i] += OpticalSensor_MeasureUseDMAMode(i);
+
+		}
+		adc_value_line1[i] = sample[i] / IRSENSOR_NUM_FILTER;
+	}
+}
+
+/**
+ * @func   LineCompare
+ * @brief  Compare between 2 sampling times
+ * @param  None
+ * @retval None
+ */
+static
+void LineCompare(void *arg)
+{
+	int16_t buff = 0;
+	for (uint8_t i = 0; i < IR_SENSOR_MAX; i++) {
+		if (adc_value_line0[i] > adc_value_line1[i]) {
+			buff = abs(adc_value_line0[i] - OpticalSensor_MeasureUseDMAMode(i));
+
+			if (buff <= IRSENSOR_ADC_THRESHOLD) {
+				lineSensor |= (1<<i);
+			}
+			else{
+				lineSensor &= ~(1<<i);
+			}
+		} else {
+			buff = abs(adc_value_line1[i] - OpticalSensor_MeasureUseDMAMode(i));
+
+			if (buff <= IRSENSOR_ADC_THRESHOLD) {
+				lineSensor |= (1<<i);
+			}
+			else{
+				lineSensor &= ~(1<<i);
+			}
+		}
+	}
+	lineSensor &= 0x7F;
+}
+
+/**
+ * @func   ControlRobot_Direction
+ * @brief  Control direction of robot
+ * @param  None
+ * @retval None
+ */
+static
+void ControlRobot_Direction(void *arg)
+{
+	static uint8_t dirState = 0; // 0 center, 1 - left, 2 - right
+	switch(lineSensor)
+	{
+		case CENTER_SIMPLE: // 1110111
+			MotorControl_ForwardRotating(MOTOR_ID_L, 22);
+			MotorControl_ForwardRotating(MOTOR_ID_R, 22);
+			dirState = 0;
+			break;
+
+		case R_CENTER_DUAL: // 1110011
+			MotorControl_ForwardRotating(MOTOR_ID_L, 22);
+			MotorControl_ForwardRotating(MOTOR_ID_R, 22);
+			dirState = 0;
+			break;
+
+		case R1_SIMPLE: // 1111011
+			MotorControl_ForwardRotating(MOTOR_ID_L, 22);
+			MotorControl_ForwardRotating(MOTOR_ID_R, 22);
+			dirState = 0;
+			break;
+
+		case L_CENTER_DUAL: // 1100111
+			MotorControl_ForwardRotating(MOTOR_ID_R, 22);
+			MotorControl_ForwardRotating(MOTOR_ID_L, 22);
+			dirState = 0;
+			break;
+
+		case L1_SIMPLE: // 1101111
+			MotorControl_ForwardRotating(MOTOR_ID_R, 22);
+			MotorControl_ForwardRotating(MOTOR_ID_L, 22);
+			dirState = 0;
+			break;
+
+		// Tilted to the right
+		case R2_DUAL: // 1111001
+			MotorControl_ForwardRotating(MOTOR_ID_R, 22);
+			MotorControl_ReverseRotating(MOTOR_ID_L, 18);
+			dirState = 1;
+			break;
+
+		case R2_SIMPLE: // 1111101
+			MotorControl_ForwardRotating(MOTOR_ID_R, 22);
+			MotorControl_ReverseRotating(MOTOR_ID_L, 18);
+			dirState = 1;
+			break;
+
+		case R3_DUAL: // 1111100
+			MotorControl_ForwardRotating(MOTOR_ID_R, 22);
+			MotorControl_ReverseRotating(MOTOR_ID_L, 18);
+			dirState = 1;
+			break;
+
+		case R3_SIMPLE: // 1111110
+			MotorControl_ForwardRotating(MOTOR_ID_R, 25);
+			MotorControl_ReverseRotating(MOTOR_ID_L, 0);
+			dirState = 1;
+			break;
+
+		// Tilted to the left
+		case L2_DUAL: // 1001111
+			MotorControl_ForwardRotating(MOTOR_ID_L, 22);
+			MotorControl_ReverseRotating(MOTOR_ID_R, 18);
+			dirState = 2;
+			break;
+
+		case L2_SIMPLE: // 1011111
+			MotorControl_ForwardRotating(MOTOR_ID_L, 22);
+			MotorControl_ReverseRotating(MOTOR_ID_R, 18);
+			dirState = 2;
+			break;
+
+		case L3_DUAL: // 0011111
+			MotorControl_ForwardRotating(MOTOR_ID_L, 22);
+			MotorControl_ReverseRotating(MOTOR_ID_R, 18);
+			dirState = 2;
+			break;
+
+		case L3_SIMPLE: // 0111111
+			MotorControl_ForwardRotating(MOTOR_ID_L, 25);
+			MotorControl_ReverseRotating(MOTOR_ID_R, 0);
+			dirState = 2;
+			break;
+
+		case ALL: // 0000000
+			MotorControl_ForwardRotating(MOTOR_ID_R, 0);
+			MotorControl_ForwardRotating(MOTOR_ID_L, 0);
+			MotorControl_ReverseRotating(MOTOR_ID_R, 0);
+			MotorControl_ReverseRotating(MOTOR_ID_L, 0);
+
+			if(dirState == 1){
+				MotorControl_ForwardRotating(MOTOR_ID_R, 22);
+				MotorControl_ReverseRotating(MOTOR_ID_L, 18);
+			}
+			else if(dirState == 2){
+				MotorControl_ForwardRotating(MOTOR_ID_L, 22);
+				MotorControl_ReverseRotating(MOTOR_ID_R, 18);
+			}
+			break;
+
+		default:
+			MotorControl_ForwardRotating(MOTOR_ID_R, 0);
+			MotorControl_ForwardRotating(MOTOR_ID_L, 0);
+			MotorControl_ReverseRotating(MOTOR_ID_R, 0);
+			MotorControl_ReverseRotating(MOTOR_ID_L, 0);
+			break;
+	}
+}
+
+/* END_FILE */

@@ -29,23 +29,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
  12 .comment      00000043  00000000  00000000  00020054  2**0
                   CONTENTS, READONLY
- 13 .debug_info   000071d5  00000000  00000000  00020097  2**0
+ 13 .debug_info   000071d9  00000000  00000000  00020097  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_abbrev 000014da  00000000  00000000  0002726c  2**0
+ 14 .debug_abbrev 000014dc  00000000  00000000  00027270  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_aranges 00000990  00000000  00000000  00028748  2**3
+ 15 .debug_aranges 00000990  00000000  00000000  00028750  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_rnglists 00000719  00000000  00000000  000290d8  2**0
+ 16 .debug_rnglists 00000719  00000000  00000000  000290e0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_macro  0000e469  00000000  00000000  000297f1  2**0
+ 17 .debug_macro  0000e469  00000000  00000000  000297f9  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   000071e5  00000000  00000000  00037c5a  2**0
+ 18 .debug_line   000071e6  00000000  00000000  00037c62  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    0004aff3  00000000  00000000  0003ee3f  2**0
+ 19 .debug_str    0004aff3  00000000  00000000  0003ee48  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_frame  000029d0  00000000  00000000  00089e34  2**2
+ 20 .debug_frame  000029d0  00000000  00000000  00089e3c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 00000045  00000000  00000000  0008c804  2**0
+ 21 .debug_line_str 00000045  00000000  00000000  0008c80c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -3043,455 +3043,467 @@ memsetl(
  80011aa:	46bd      	mov	sp, r7
  80011ac:	f85d 7b04 	ldr.w	r7, [sp], #4
  80011b0:	4770      	bx	lr
-
-080011b2 <Calculate_time>:
-uint16_t  	Kalman_light;
-
-/******************************************************************************/
-/*                     EXPORTED TYPES and DEFINITIONS                         */
-/******************************************************************************/
-uint32_t Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent){
- 80011b2:	b480      	push	{r7}
- 80011b4:	b085      	sub	sp, #20
- 80011b6:	af00      	add	r7, sp, #0
- 80011b8:	6078      	str	r0, [r7, #4]
- 80011ba:	6039      	str	r1, [r7, #0]
-	uint32_t TimeTotal;
-	if (TimeInit >= TimeCurrent){
- 80011bc:	687a      	ldr	r2, [r7, #4]
- 80011be:	683b      	ldr	r3, [r7, #0]
- 80011c0:	429a      	cmp	r2, r3
- 80011c2:	d304      	bcc.n	80011ce <Calculate_time+0x1c>
-		TimeTotal = TimeCurrent - TimeInit;
- 80011c4:	683a      	ldr	r2, [r7, #0]
- 80011c6:	687b      	ldr	r3, [r7, #4]
- 80011c8:	1ad3      	subs	r3, r2, r3
- 80011ca:	60fb      	str	r3, [r7, #12]
- 80011cc:	e004      	b.n	80011d8 <Calculate_time+0x26>
-	}else {
-		TimeTotal = 0xFFFFFFFFU + TimeCurrent - TimeInit;
- 80011ce:	683a      	ldr	r2, [r7, #0]
- 80011d0:	687b      	ldr	r3, [r7, #4]
- 80011d2:	1ad3      	subs	r3, r2, r3
- 80011d4:	3b01      	subs	r3, #1
- 80011d6:	60fb      	str	r3, [r7, #12]
-	}
-	return TimeTotal;
- 80011d8:	68fb      	ldr	r3, [r7, #12]
-}
- 80011da:	4618      	mov	r0, r3
- 80011dc:	3714      	adds	r7, #20
- 80011de:	46bd      	mov	sp, r7
- 80011e0:	f85d 7b04 	ldr.w	r7, [sp], #4
- 80011e4:	4770      	bx	lr
 	...
 
-080011e8 <main>:
+080011b4 <main>:
 /******************************************************************************/
 /*                            EXPORTED FUNCTIONS                              */
 /******************************************************************************/
 uint16_t Time_now = 0;
 int main(void)
 {
- 80011e8:	b598      	push	{r3, r4, r7, lr}
- 80011ea:	af00      	add	r7, sp, #0
+ 80011b4:	b598      	push	{r3, r4, r7, lr}
+ 80011b6:	af00      	add	r7, sp, #0
+	//Khoi tao cac gia tri ban dau
 	SystemCoreClockUpdate();
- 80011ec:	f7ff f828 	bl	8000240 <SystemCoreClockUpdate>
+ 80011b8:	f7ff f842 	bl	8000240 <SystemCoreClockUpdate>
 	TimerInit();
- 80011f0:	f7ff fefc 	bl	8000fec <TimerInit>
+ 80011bc:	f7ff ff16 	bl	8000fec <TimerInit>
 	TimPWM_Init();
- 80011f4:	f000 f86e 	bl	80012d4 <TimPWM_Init>
+ 80011c0:	f000 f86e 	bl	80012a0 <TimPWM_Init>
 //	ADC1_LightInit(GPIOC, GPIO_Pin_5, ADC_Channel_15);
+
+	//Khoi tao cac bo ADC
 	ADC1_LightInit(GPIOA, GPIO_Pin_6, ADC_Channel_6);
- 80011f8:	2206      	movs	r2, #6
- 80011fa:	2140      	movs	r1, #64	; 0x40
- 80011fc:	482f      	ldr	r0, [pc, #188]	; (80012bc <main+0xd4>)
- 80011fe:	f000 f8b9 	bl	8001374 <ADC1_LightInit>
+ 80011c4:	2206      	movs	r2, #6
+ 80011c6:	2140      	movs	r1, #64	; 0x40
+ 80011c8:	482f      	ldr	r0, [pc, #188]	; (8001288 <main+0xd4>)
+ 80011ca:	f000 f8b9 	bl	8001340 <ADC1_LightInit>
 	ADC1_LightInit(GPIOA, GPIO_Pin_7, ADC_Channel_7);
- 8001202:	2207      	movs	r2, #7
- 8001204:	2180      	movs	r1, #128	; 0x80
- 8001206:	482d      	ldr	r0, [pc, #180]	; (80012bc <main+0xd4>)
- 8001208:	f000 f8b4 	bl	8001374 <ADC1_LightInit>
+ 80011ce:	2207      	movs	r2, #7
+ 80011d0:	2180      	movs	r1, #128	; 0x80
+ 80011d2:	482d      	ldr	r0, [pc, #180]	; (8001288 <main+0xd4>)
+ 80011d4:	f000 f8b4 	bl	8001340 <ADC1_LightInit>
 	ADC1_LightInit(GPIOA, GPIO_Pin_5, ADC_Channel_5);
- 800120c:	2205      	movs	r2, #5
- 800120e:	2120      	movs	r1, #32
- 8001210:	482a      	ldr	r0, [pc, #168]	; (80012bc <main+0xd4>)
- 8001212:	f000 f8af 	bl	8001374 <ADC1_LightInit>
+ 80011d8:	2205      	movs	r2, #5
+ 80011da:	2120      	movs	r1, #32
+ 80011dc:	482a      	ldr	r0, [pc, #168]	; (8001288 <main+0xd4>)
+ 80011de:	f000 f8af 	bl	8001340 <ADC1_LightInit>
 	ADC1_LightInit(GPIOB, GPIO_Pin_0, ADC_Channel_8);
- 8001216:	2208      	movs	r2, #8
- 8001218:	2101      	movs	r1, #1
- 800121a:	4829      	ldr	r0, [pc, #164]	; (80012c0 <main+0xd8>)
- 800121c:	f000 f8aa 	bl	8001374 <ADC1_LightInit>
+ 80011e2:	2208      	movs	r2, #8
+ 80011e4:	2101      	movs	r1, #1
+ 80011e6:	4829      	ldr	r0, [pc, #164]	; (800128c <main+0xd8>)
+ 80011e8:	f000 f8aa 	bl	8001340 <ADC1_LightInit>
 	ADC1_LightInit(GPIOC, GPIO_Pin_1, ADC_Channel_11);
- 8001220:	220b      	movs	r2, #11
- 8001222:	2102      	movs	r1, #2
- 8001224:	4827      	ldr	r0, [pc, #156]	; (80012c4 <main+0xdc>)
- 8001226:	f000 f8a5 	bl	8001374 <ADC1_LightInit>
+ 80011ec:	220b      	movs	r2, #11
+ 80011ee:	2102      	movs	r1, #2
+ 80011f0:	4827      	ldr	r0, [pc, #156]	; (8001290 <main+0xdc>)
+ 80011f2:	f000 f8a5 	bl	8001340 <ADC1_LightInit>
+
+	//Infinite loop
 	while (1){
 		if (Calculate_time(Time_now, GetMilSecTick()) >100){
- 800122a:	4b27      	ldr	r3, [pc, #156]	; (80012c8 <main+0xe0>)
- 800122c:	881b      	ldrh	r3, [r3, #0]
- 800122e:	461c      	mov	r4, r3
- 8001230:	f7ff fefe 	bl	8001030 <GetMilSecTick>
- 8001234:	4603      	mov	r3, r0
- 8001236:	4619      	mov	r1, r3
- 8001238:	4620      	mov	r0, r4
- 800123a:	f7ff ffba 	bl	80011b2 <Calculate_time>
- 800123e:	4603      	mov	r3, r0
- 8001240:	2b64      	cmp	r3, #100	; 0x64
- 8001242:	d9f2      	bls.n	800122a <main+0x42>
+ 80011f6:	4b27      	ldr	r3, [pc, #156]	; (8001294 <main+0xe0>)
+ 80011f8:	881b      	ldrh	r3, [r3, #0]
+ 80011fa:	461c      	mov	r4, r3
+ 80011fc:	f7ff ff18 	bl	8001030 <GetMilSecTick>
+ 8001200:	4603      	mov	r3, r0
+ 8001202:	4619      	mov	r1, r3
+ 8001204:	4620      	mov	r0, r4
+ 8001206:	f000 f91f 	bl	8001448 <Calculate_time>
+ 800120a:	4603      	mov	r3, r0
+ 800120c:	2b64      	cmp	r3, #100	; 0x64
+ 800120e:	d9f2      	bls.n	80011f6 <main+0x42>
+			//Ghi cac gia tri ADC vao mang
 		ADC_Val[0] = 	ADC_GetValue(ADC_Channel_6);
- 8001244:	2006      	movs	r0, #6
- 8001246:	f000 f919 	bl	800147c <ADC_GetValue>
- 800124a:	4603      	mov	r3, r0
- 800124c:	461a      	mov	r2, r3
- 800124e:	4b1f      	ldr	r3, [pc, #124]	; (80012cc <main+0xe4>)
- 8001250:	801a      	strh	r2, [r3, #0]
+ 8001210:	2006      	movs	r0, #6
+ 8001212:	f000 f933 	bl	800147c <ADC_GetValue>
+ 8001216:	4603      	mov	r3, r0
+ 8001218:	461a      	mov	r2, r3
+ 800121a:	4b1f      	ldr	r3, [pc, #124]	; (8001298 <main+0xe4>)
+ 800121c:	801a      	strh	r2, [r3, #0]
 		ADC_Val[1] = 	ADC_GetValue(ADC_Channel_7);
- 8001252:	2007      	movs	r0, #7
- 8001254:	f000 f912 	bl	800147c <ADC_GetValue>
- 8001258:	4603      	mov	r3, r0
- 800125a:	461a      	mov	r2, r3
- 800125c:	4b1b      	ldr	r3, [pc, #108]	; (80012cc <main+0xe4>)
- 800125e:	805a      	strh	r2, [r3, #2]
+ 800121e:	2007      	movs	r0, #7
+ 8001220:	f000 f92c 	bl	800147c <ADC_GetValue>
+ 8001224:	4603      	mov	r3, r0
+ 8001226:	461a      	mov	r2, r3
+ 8001228:	4b1b      	ldr	r3, [pc, #108]	; (8001298 <main+0xe4>)
+ 800122a:	805a      	strh	r2, [r3, #2]
 		ADC_Val[2] = 	ADC_GetValue(ADC_Channel_5);
- 8001260:	2005      	movs	r0, #5
- 8001262:	f000 f90b 	bl	800147c <ADC_GetValue>
- 8001266:	4603      	mov	r3, r0
- 8001268:	461a      	mov	r2, r3
- 800126a:	4b18      	ldr	r3, [pc, #96]	; (80012cc <main+0xe4>)
- 800126c:	809a      	strh	r2, [r3, #4]
+ 800122c:	2005      	movs	r0, #5
+ 800122e:	f000 f925 	bl	800147c <ADC_GetValue>
+ 8001232:	4603      	mov	r3, r0
+ 8001234:	461a      	mov	r2, r3
+ 8001236:	4b18      	ldr	r3, [pc, #96]	; (8001298 <main+0xe4>)
+ 8001238:	809a      	strh	r2, [r3, #4]
 		ADC_Val[3] = 	ADC_GetValue(ADC_Channel_8);
- 800126e:	2008      	movs	r0, #8
- 8001270:	f000 f904 	bl	800147c <ADC_GetValue>
- 8001274:	4603      	mov	r3, r0
- 8001276:	461a      	mov	r2, r3
- 8001278:	4b14      	ldr	r3, [pc, #80]	; (80012cc <main+0xe4>)
- 800127a:	80da      	strh	r2, [r3, #6]
+ 800123a:	2008      	movs	r0, #8
+ 800123c:	f000 f91e 	bl	800147c <ADC_GetValue>
+ 8001240:	4603      	mov	r3, r0
+ 8001242:	461a      	mov	r2, r3
+ 8001244:	4b14      	ldr	r3, [pc, #80]	; (8001298 <main+0xe4>)
+ 8001246:	80da      	strh	r2, [r3, #6]
 		ADC_Val[4] = 	ADC_GetValue(ADC_Channel_11);
- 800127c:	200b      	movs	r0, #11
- 800127e:	f000 f8fd 	bl	800147c <ADC_GetValue>
- 8001282:	4603      	mov	r3, r0
- 8001284:	461a      	mov	r2, r3
- 8001286:	4b11      	ldr	r3, [pc, #68]	; (80012cc <main+0xe4>)
- 8001288:	811a      	strh	r2, [r3, #8]
+ 8001248:	200b      	movs	r0, #11
+ 800124a:	f000 f917 	bl	800147c <ADC_GetValue>
+ 800124e:	4603      	mov	r3, r0
+ 8001250:	461a      	mov	r2, r3
+ 8001252:	4b11      	ldr	r3, [pc, #68]	; (8001298 <main+0xe4>)
+ 8001254:	811a      	strh	r2, [r3, #8]
 		Led_ControlPWM(ADC_Val[1]*100/4095);
- 800128a:	4b10      	ldr	r3, [pc, #64]	; (80012cc <main+0xe4>)
- 800128c:	885b      	ldrh	r3, [r3, #2]
- 800128e:	461a      	mov	r2, r3
- 8001290:	2364      	movs	r3, #100	; 0x64
- 8001292:	fb02 f303 	mul.w	r3, r2, r3
- 8001296:	4a0e      	ldr	r2, [pc, #56]	; (80012d0 <main+0xe8>)
- 8001298:	fb82 1203 	smull	r1, r2, r2, r3
- 800129c:	441a      	add	r2, r3
- 800129e:	12d2      	asrs	r2, r2, #11
- 80012a0:	17db      	asrs	r3, r3, #31
- 80012a2:	1ad3      	subs	r3, r2, r3
- 80012a4:	b2db      	uxtb	r3, r3
- 80012a6:	4618      	mov	r0, r3
- 80012a8:	f000 f912 	bl	80014d0 <Led_ControlPWM>
+ 8001256:	4b10      	ldr	r3, [pc, #64]	; (8001298 <main+0xe4>)
+ 8001258:	885b      	ldrh	r3, [r3, #2]
+ 800125a:	461a      	mov	r2, r3
+ 800125c:	2364      	movs	r3, #100	; 0x64
+ 800125e:	fb02 f303 	mul.w	r3, r2, r3
+ 8001262:	4a0e      	ldr	r2, [pc, #56]	; (800129c <main+0xe8>)
+ 8001264:	fb82 1203 	smull	r1, r2, r2, r3
+ 8001268:	441a      	add	r2, r3
+ 800126a:	12d2      	asrs	r2, r2, #11
+ 800126c:	17db      	asrs	r3, r3, #31
+ 800126e:	1ad3      	subs	r3, r2, r3
+ 8001270:	b2db      	uxtb	r3, r3
+ 8001272:	4618      	mov	r0, r3
+ 8001274:	f000 f92c 	bl	80014d0 <Led_ControlPWM>
 		Time_now = GetMilSecTick();
- 80012ac:	f7ff fec0 	bl	8001030 <GetMilSecTick>
- 80012b0:	4603      	mov	r3, r0
- 80012b2:	b29a      	uxth	r2, r3
- 80012b4:	4b04      	ldr	r3, [pc, #16]	; (80012c8 <main+0xe0>)
- 80012b6:	801a      	strh	r2, [r3, #0]
+ 8001278:	f7ff feda 	bl	8001030 <GetMilSecTick>
+ 800127c:	4603      	mov	r3, r0
+ 800127e:	b29a      	uxth	r2, r3
+ 8001280:	4b04      	ldr	r3, [pc, #16]	; (8001294 <main+0xe0>)
+ 8001282:	801a      	strh	r2, [r3, #0]
 		if (Calculate_time(Time_now, GetMilSecTick()) >100){
- 80012b8:	e7b7      	b.n	800122a <main+0x42>
- 80012ba:	bf00      	nop
- 80012bc:	40020000 	.word	0x40020000
- 80012c0:	40020400 	.word	0x40020400
- 80012c4:	40020800 	.word	0x40020800
- 80012c8:	200001d6 	.word	0x200001d6
- 80012cc:	200001cc 	.word	0x200001cc
- 80012d0:	80080081 	.word	0x80080081
+ 8001284:	e7b7      	b.n	80011f6 <main+0x42>
+ 8001286:	bf00      	nop
+ 8001288:	40020000 	.word	0x40020000
+ 800128c:	40020400 	.word	0x40020400
+ 8001290:	40020800 	.word	0x40020800
+ 8001294:	200001d6 	.word	0x200001d6
+ 8001298:	200001cc 	.word	0x200001cc
+ 800129c:	80080081 	.word	0x80080081
 
-080012d4 <TimPWM_Init>:
+080012a0 <TimPWM_Init>:
 		}
    }
 }
 /******************************************************************************/
 void TimPWM_Init(void){
- 80012d4:	b580      	push	{r7, lr}
- 80012d6:	b08a      	sub	sp, #40	; 0x28
- 80012d8:	af00      	add	r7, sp, #0
+ 80012a0:	b580      	push	{r7, lr}
+ 80012a2:	b08a      	sub	sp, #40	; 0x28
+ 80012a4:	af00      	add	r7, sp, #0
 	TIM_TimeBaseInitTypeDef TIM_Initstructe;
 	GPIO_InitTypeDef		GPIO_Initstructe;
 	TIM_OCInitTypeDef		Tim_OCInittructure;
 
 	//Cau hinh chan GPIO
 	RCC_AHB1PeriphClockCmd(LED_GPIO_RCC, ENABLE);
- 80012da:	2101      	movs	r1, #1
- 80012dc:	2001      	movs	r0, #1
- 80012de:	f7ff fc29 	bl	8000b34 <RCC_AHB1PeriphClockCmd>
+ 80012a6:	2101      	movs	r1, #1
+ 80012a8:	2001      	movs	r0, #1
+ 80012aa:	f7ff fc43 	bl	8000b34 <RCC_AHB1PeriphClockCmd>
 
 	GPIO_Initstructe.GPIO_Mode = GPIO_Mode_AF;
- 80012e2:	2302      	movs	r3, #2
- 80012e4:	763b      	strb	r3, [r7, #24]
+ 80012ae:	2302      	movs	r3, #2
+ 80012b0:	763b      	strb	r3, [r7, #24]
 	GPIO_Initstructe.GPIO_OType = GPIO_OType_PP;
- 80012e6:	2300      	movs	r3, #0
- 80012e8:	76bb      	strb	r3, [r7, #26]
+ 80012b2:	2300      	movs	r3, #0
+ 80012b4:	76bb      	strb	r3, [r7, #26]
 	GPIO_Initstructe.GPIO_PuPd = GPIO_PuPd_NOPULL;
- 80012ea:	2300      	movs	r3, #0
- 80012ec:	76fb      	strb	r3, [r7, #27]
+ 80012b6:	2300      	movs	r3, #0
+ 80012b8:	76fb      	strb	r3, [r7, #27]
 	GPIO_Initstructe.GPIO_Speed = GPIO_Speed_50MHz;
- 80012ee:	2302      	movs	r3, #2
- 80012f0:	767b      	strb	r3, [r7, #25]
+ 80012ba:	2302      	movs	r3, #2
+ 80012bc:	767b      	strb	r3, [r7, #25]
 
 	GPIO_PinAFConfig(GPIOA, GPIO_PinSource11, GPIO_AF_TIM1);
- 80012f2:	2201      	movs	r2, #1
- 80012f4:	210b      	movs	r1, #11
- 80012f6:	481d      	ldr	r0, [pc, #116]	; (800136c <TimPWM_Init+0x98>)
- 80012f8:	f7ff fb24 	bl	8000944 <GPIO_PinAFConfig>
+ 80012be:	2201      	movs	r2, #1
+ 80012c0:	210b      	movs	r1, #11
+ 80012c2:	481d      	ldr	r0, [pc, #116]	; (8001338 <TimPWM_Init+0x98>)
+ 80012c4:	f7ff fb3e 	bl	8000944 <GPIO_PinAFConfig>
 
 	GPIO_Initstructe.GPIO_Pin = GPIO_Pin_11;
- 80012fc:	f44f 6300 	mov.w	r3, #2048	; 0x800
- 8001300:	617b      	str	r3, [r7, #20]
+ 80012c8:	f44f 6300 	mov.w	r3, #2048	; 0x800
+ 80012cc:	617b      	str	r3, [r7, #20]
 	GPIO_Init(GPIOA, &GPIO_Initstructe);
- 8001302:	f107 0314 	add.w	r3, r7, #20
- 8001306:	4619      	mov	r1, r3
- 8001308:	4818      	ldr	r0, [pc, #96]	; (800136c <TimPWM_Init+0x98>)
- 800130a:	f7ff fa8c 	bl	8000826 <GPIO_Init>
+ 80012ce:	f107 0314 	add.w	r3, r7, #20
+ 80012d2:	4619      	mov	r1, r3
+ 80012d4:	4818      	ldr	r0, [pc, #96]	; (8001338 <TimPWM_Init+0x98>)
+ 80012d6:	f7ff faa6 	bl	8000826 <GPIO_Init>
 
 	//Cau hinh Timer basic
 	RCC_APB2PeriphClockCmd(TIM_RCC, ENABLE);
- 800130e:	2101      	movs	r1, #1
- 8001310:	2001      	movs	r0, #1
- 8001312:	f7ff fc2f 	bl	8000b74 <RCC_APB2PeriphClockCmd>
+ 80012da:	2101      	movs	r1, #1
+ 80012dc:	2001      	movs	r0, #1
+ 80012de:	f7ff fc49 	bl	8000b74 <RCC_APB2PeriphClockCmd>
 
 	TIM_Initstructe.TIM_CounterMode = TIM_CounterMode_Up;
- 8001316:	2300      	movs	r3, #0
- 8001318:	83fb      	strh	r3, [r7, #30]
+ 80012e2:	2300      	movs	r3, #0
+ 80012e4:	83fb      	strh	r3, [r7, #30]
 	TIM_Initstructe.TIM_ClockDivision = 0;
- 800131a:	2300      	movs	r3, #0
- 800131c:	84bb      	strh	r3, [r7, #36]	; 0x24
+ 80012e6:	2300      	movs	r3, #0
+ 80012e8:	84bb      	strh	r3, [r7, #36]	; 0x24
 	TIM_Initstructe.TIM_RepetitionCounter = 0;
- 800131e:	2300      	movs	r3, #0
- 8001320:	f887 3026 	strb.w	r3, [r7, #38]	; 0x26
+ 80012ea:	2300      	movs	r3, #0
+ 80012ec:	f887 3026 	strb.w	r3, [r7, #38]	; 0x26
 	TIM_Initstructe.TIM_Prescaler = TIM_PRESCALE;
- 8001324:	2300      	movs	r3, #0
- 8001326:	83bb      	strh	r3, [r7, #28]
+ 80012f0:	2300      	movs	r3, #0
+ 80012f2:	83bb      	strh	r3, [r7, #28]
 	TIM_Initstructe.TIM_Period = TIM_PERIOD;
- 8001328:	f242 03cf 	movw	r3, #8399	; 0x20cf
- 800132c:	623b      	str	r3, [r7, #32]
+ 80012f4:	f242 03cf 	movw	r3, #8399	; 0x20cf
+ 80012f8:	623b      	str	r3, [r7, #32]
 
 	TIM_TimeBaseInit(TIM_INSTANCE, &TIM_Initstructe);
- 800132e:	f107 031c 	add.w	r3, r7, #28
- 8001332:	4619      	mov	r1, r3
- 8001334:	480e      	ldr	r0, [pc, #56]	; (8001370 <TimPWM_Init+0x9c>)
- 8001336:	f7ff fc5d 	bl	8000bf4 <TIM_TimeBaseInit>
+ 80012fa:	f107 031c 	add.w	r3, r7, #28
+ 80012fe:	4619      	mov	r1, r3
+ 8001300:	480e      	ldr	r0, [pc, #56]	; (800133c <TimPWM_Init+0x9c>)
+ 8001302:	f7ff fc77 	bl	8000bf4 <TIM_TimeBaseInit>
 
 	//Cau hinh PWM
 	Tim_OCInittructure.TIM_OCMode = TIM_OCMode_PWM1;
- 800133a:	2360      	movs	r3, #96	; 0x60
- 800133c:	803b      	strh	r3, [r7, #0]
+ 8001306:	2360      	movs	r3, #96	; 0x60
+ 8001308:	803b      	strh	r3, [r7, #0]
 	Tim_OCInittructure.TIM_OutputState = TIM_OutputState_Enable;
- 800133e:	2301      	movs	r3, #1
- 8001340:	807b      	strh	r3, [r7, #2]
+ 800130a:	2301      	movs	r3, #1
+ 800130c:	807b      	strh	r3, [r7, #2]
 	Tim_OCInittructure.TIM_Pulse = 0;
- 8001342:	2300      	movs	r3, #0
- 8001344:	60bb      	str	r3, [r7, #8]
+ 800130e:	2300      	movs	r3, #0
+ 8001310:	60bb      	str	r3, [r7, #8]
 	Tim_OCInittructure.TIM_OCPolarity = TIM_OCPolarity_High;
- 8001346:	2300      	movs	r3, #0
- 8001348:	81bb      	strh	r3, [r7, #12]
+ 8001312:	2300      	movs	r3, #0
+ 8001314:	81bb      	strh	r3, [r7, #12]
 
 	TIM_OC4Init(TIM_INSTANCE, &Tim_OCInittructure);
- 800134a:	463b      	mov	r3, r7
- 800134c:	4619      	mov	r1, r3
- 800134e:	4808      	ldr	r0, [pc, #32]	; (8001370 <TimPWM_Init+0x9c>)
- 8001350:	f7ff fcdc 	bl	8000d0c <TIM_OC4Init>
+ 8001316:	463b      	mov	r3, r7
+ 8001318:	4619      	mov	r1, r3
+ 800131a:	4808      	ldr	r0, [pc, #32]	; (800133c <TimPWM_Init+0x9c>)
+ 800131c:	f7ff fcf6 	bl	8000d0c <TIM_OC4Init>
 
 	TIM_Cmd(TIM_INSTANCE, ENABLE);
- 8001354:	2101      	movs	r1, #1
- 8001356:	4806      	ldr	r0, [pc, #24]	; (8001370 <TimPWM_Init+0x9c>)
- 8001358:	f7ff fcb8 	bl	8000ccc <TIM_Cmd>
+ 8001320:	2101      	movs	r1, #1
+ 8001322:	4806      	ldr	r0, [pc, #24]	; (800133c <TimPWM_Init+0x9c>)
+ 8001324:	f7ff fcd2 	bl	8000ccc <TIM_Cmd>
 
 	TIM_CtrlPWMOutputs(TIM_INSTANCE, ENABLE);
- 800135c:	2101      	movs	r1, #1
- 800135e:	4804      	ldr	r0, [pc, #16]	; (8001370 <TimPWM_Init+0x9c>)
- 8001360:	f7ff fd4a 	bl	8000df8 <TIM_CtrlPWMOutputs>
+ 8001328:	2101      	movs	r1, #1
+ 800132a:	4804      	ldr	r0, [pc, #16]	; (800133c <TimPWM_Init+0x9c>)
+ 800132c:	f7ff fd64 	bl	8000df8 <TIM_CtrlPWMOutputs>
 }
- 8001364:	bf00      	nop
- 8001366:	3728      	adds	r7, #40	; 0x28
- 8001368:	46bd      	mov	sp, r7
- 800136a:	bd80      	pop	{r7, pc}
- 800136c:	40020000 	.word	0x40020000
- 8001370:	40010000 	.word	0x40010000
+ 8001330:	bf00      	nop
+ 8001332:	3728      	adds	r7, #40	; 0x28
+ 8001334:	46bd      	mov	sp, r7
+ 8001336:	bd80      	pop	{r7, pc}
+ 8001338:	40020000 	.word	0x40020000
+ 800133c:	40010000 	.word	0x40010000
 
-08001374 <ADC1_LightInit>:
-
+08001340 <ADC1_LightInit>:
+/*Ham khoi tao ADC
+ * Tham so truyen vao: GPIOx : x = A,B,C
+ * 						GPIO_Pin
+ * 						ADC_Channel
+ */
 void ADC1_LightInit(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, uint8_t ADC_Channel){
- 8001374:	b580      	push	{r7, lr}
- 8001376:	b08e      	sub	sp, #56	; 0x38
- 8001378:	af00      	add	r7, sp, #0
- 800137a:	6078      	str	r0, [r7, #4]
- 800137c:	460b      	mov	r3, r1
- 800137e:	807b      	strh	r3, [r7, #2]
- 8001380:	4613      	mov	r3, r2
- 8001382:	707b      	strb	r3, [r7, #1]
+ 8001340:	b580      	push	{r7, lr}
+ 8001342:	b08e      	sub	sp, #56	; 0x38
+ 8001344:	af00      	add	r7, sp, #0
+ 8001346:	6078      	str	r0, [r7, #4]
+ 8001348:	460b      	mov	r3, r1
+ 800134a:	807b      	strh	r3, [r7, #2]
+ 800134c:	4613      	mov	r3, r2
+ 800134e:	707b      	strb	r3, [r7, #1]
 	ADC_InitTypeDef 		ADC_Initstructure;
 	ADC_CommonInitTypeDef	ADC_CommonInitstructure;
 	GPIO_InitTypeDef		GPIO_Initstructure;
 
 	//Cap xung clock
 	RCC_APB2PeriphClockCmd(ADC_RCC, ENABLE);
- 8001384:	2101      	movs	r1, #1
- 8001386:	f44f 7080 	mov.w	r0, #256	; 0x100
- 800138a:	f7ff fbf3 	bl	8000b74 <RCC_APB2PeriphClockCmd>
+ 8001350:	2101      	movs	r1, #1
+ 8001352:	f44f 7080 	mov.w	r0, #256	; 0x100
+ 8001356:	f7ff fc0d 	bl	8000b74 <RCC_APB2PeriphClockCmd>
 //	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
 	switch ((uint32_t)GPIOx) {
- 800138e:	687b      	ldr	r3, [r7, #4]
- 8001390:	4a36      	ldr	r2, [pc, #216]	; (800146c <ADC1_LightInit+0xf8>)
- 8001392:	4293      	cmp	r3, r2
- 8001394:	d013      	beq.n	80013be <ADC1_LightInit+0x4a>
- 8001396:	4a35      	ldr	r2, [pc, #212]	; (800146c <ADC1_LightInit+0xf8>)
- 8001398:	4293      	cmp	r3, r2
- 800139a:	d815      	bhi.n	80013c8 <ADC1_LightInit+0x54>
- 800139c:	4a34      	ldr	r2, [pc, #208]	; (8001470 <ADC1_LightInit+0xfc>)
- 800139e:	4293      	cmp	r3, r2
- 80013a0:	d003      	beq.n	80013aa <ADC1_LightInit+0x36>
- 80013a2:	4a34      	ldr	r2, [pc, #208]	; (8001474 <ADC1_LightInit+0x100>)
- 80013a4:	4293      	cmp	r3, r2
- 80013a6:	d005      	beq.n	80013b4 <ADC1_LightInit+0x40>
+ 800135a:	687b      	ldr	r3, [r7, #4]
+ 800135c:	4a36      	ldr	r2, [pc, #216]	; (8001438 <ADC1_LightInit+0xf8>)
+ 800135e:	4293      	cmp	r3, r2
+ 8001360:	d013      	beq.n	800138a <ADC1_LightInit+0x4a>
+ 8001362:	4a35      	ldr	r2, [pc, #212]	; (8001438 <ADC1_LightInit+0xf8>)
+ 8001364:	4293      	cmp	r3, r2
+ 8001366:	d815      	bhi.n	8001394 <ADC1_LightInit+0x54>
+ 8001368:	4a34      	ldr	r2, [pc, #208]	; (800143c <ADC1_LightInit+0xfc>)
+ 800136a:	4293      	cmp	r3, r2
+ 800136c:	d003      	beq.n	8001376 <ADC1_LightInit+0x36>
+ 800136e:	4a34      	ldr	r2, [pc, #208]	; (8001440 <ADC1_LightInit+0x100>)
+ 8001370:	4293      	cmp	r3, r2
+ 8001372:	d005      	beq.n	8001380 <ADC1_LightInit+0x40>
 			break;
 		case (uint32_t)GPIOC:
 			RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
 			break;
 		default:
 			break;
- 80013a8:	e00e      	b.n	80013c8 <ADC1_LightInit+0x54>
+ 8001374:	e00e      	b.n	8001394 <ADC1_LightInit+0x54>
 			RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
- 80013aa:	2101      	movs	r1, #1
- 80013ac:	2001      	movs	r0, #1
- 80013ae:	f7ff fbc1 	bl	8000b34 <RCC_AHB1PeriphClockCmd>
+ 8001376:	2101      	movs	r1, #1
+ 8001378:	2001      	movs	r0, #1
+ 800137a:	f7ff fbdb 	bl	8000b34 <RCC_AHB1PeriphClockCmd>
 			break;
- 80013b2:	e00a      	b.n	80013ca <ADC1_LightInit+0x56>
+ 800137e:	e00a      	b.n	8001396 <ADC1_LightInit+0x56>
 			RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
- 80013b4:	2101      	movs	r1, #1
- 80013b6:	2002      	movs	r0, #2
- 80013b8:	f7ff fbbc 	bl	8000b34 <RCC_AHB1PeriphClockCmd>
+ 8001380:	2101      	movs	r1, #1
+ 8001382:	2002      	movs	r0, #2
+ 8001384:	f7ff fbd6 	bl	8000b34 <RCC_AHB1PeriphClockCmd>
 			break;
- 80013bc:	e005      	b.n	80013ca <ADC1_LightInit+0x56>
+ 8001388:	e005      	b.n	8001396 <ADC1_LightInit+0x56>
 			RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
- 80013be:	2101      	movs	r1, #1
- 80013c0:	2004      	movs	r0, #4
- 80013c2:	f7ff fbb7 	bl	8000b34 <RCC_AHB1PeriphClockCmd>
+ 800138a:	2101      	movs	r1, #1
+ 800138c:	2004      	movs	r0, #4
+ 800138e:	f7ff fbd1 	bl	8000b34 <RCC_AHB1PeriphClockCmd>
 			break;
- 80013c6:	e000      	b.n	80013ca <ADC1_LightInit+0x56>
+ 8001392:	e000      	b.n	8001396 <ADC1_LightInit+0x56>
 			break;
- 80013c8:	bf00      	nop
+ 8001394:	bf00      	nop
 	}
 
 
 	//Khoi tao chan GPIO
 	GPIO_Initstructure.GPIO_Mode = GPIO_Mode_AN;
- 80013ca:	2303      	movs	r3, #3
- 80013cc:	733b      	strb	r3, [r7, #12]
+ 8001396:	2303      	movs	r3, #3
+ 8001398:	733b      	strb	r3, [r7, #12]
 	GPIO_Initstructure.GPIO_Pin = GPIO_Pin;
- 80013ce:	887b      	ldrh	r3, [r7, #2]
- 80013d0:	60bb      	str	r3, [r7, #8]
+ 800139a:	887b      	ldrh	r3, [r7, #2]
+ 800139c:	60bb      	str	r3, [r7, #8]
 	GPIO_Initstructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
- 80013d2:	2300      	movs	r3, #0
- 80013d4:	73fb      	strb	r3, [r7, #15]
+ 800139e:	2300      	movs	r3, #0
+ 80013a0:	73fb      	strb	r3, [r7, #15]
 
 	GPIO_Init(GPIOx, &GPIO_Initstructure);
- 80013d6:	f107 0308 	add.w	r3, r7, #8
- 80013da:	4619      	mov	r1, r3
- 80013dc:	6878      	ldr	r0, [r7, #4]
- 80013de:	f7ff fa22 	bl	8000826 <GPIO_Init>
+ 80013a2:	f107 0308 	add.w	r3, r7, #8
+ 80013a6:	4619      	mov	r1, r3
+ 80013a8:	6878      	ldr	r0, [r7, #4]
+ 80013aa:	f7ff fa3c 	bl	8000826 <GPIO_Init>
 
 	ADC_DeInit();
- 80013e2:	f7ff f801 	bl	80003e8 <ADC_DeInit>
+ 80013ae:	f7ff f81b 	bl	80003e8 <ADC_DeInit>
 
 	//Khoi tao ADC common
 	ADC_CommonInitstructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
- 80013e6:	2300      	movs	r3, #0
- 80013e8:	61bb      	str	r3, [r7, #24]
+ 80013b2:	2300      	movs	r3, #0
+ 80013b4:	61bb      	str	r3, [r7, #24]
 	ADC_CommonInitstructure.ADC_Mode = ADC_Mode_Independent;
- 80013ea:	2300      	movs	r3, #0
- 80013ec:	613b      	str	r3, [r7, #16]
-	ADC_CommonInitstructure.ADC_Prescaler = ADC_Prescaler_Div2;
- 80013ee:	2300      	movs	r3, #0
- 80013f0:	617b      	str	r3, [r7, #20]
+ 80013b6:	2300      	movs	r3, #0
+ 80013b8:	613b      	str	r3, [r7, #16]
+	ADC_CommonInitstructure.ADC_Prescaler = ADC_Prescaler_Div6;
+ 80013ba:	f44f 3300 	mov.w	r3, #131072	; 0x20000
+ 80013be:	617b      	str	r3, [r7, #20]
 	ADC_CommonInitstructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;
- 80013f2:	2300      	movs	r3, #0
- 80013f4:	61fb      	str	r3, [r7, #28]
+ 80013c0:	2300      	movs	r3, #0
+ 80013c2:	61fb      	str	r3, [r7, #28]
 
 	ADC_CommonInit(&ADC_CommonInitstructure);
- 80013f6:	f107 0310 	add.w	r3, r7, #16
- 80013fa:	4618      	mov	r0, r3
- 80013fc:	f7ff f858 	bl	80004b0 <ADC_CommonInit>
+ 80013c4:	f107 0310 	add.w	r3, r7, #16
+ 80013c8:	4618      	mov	r0, r3
+ 80013ca:	f7ff f871 	bl	80004b0 <ADC_CommonInit>
 
 	//Khoi tao ADC1
 	ADC_Initstructure.ADC_ContinuousConvMode = ENABLE;
- 8001400:	2301      	movs	r3, #1
- 8001402:	f887 3025 	strb.w	r3, [r7, #37]	; 0x25
+ 80013ce:	2301      	movs	r3, #1
+ 80013d0:	f887 3025 	strb.w	r3, [r7, #37]	; 0x25
 	ADC_Initstructure.ADC_DataAlign = ADC_DataAlign_Right;
- 8001406:	2300      	movs	r3, #0
- 8001408:	633b      	str	r3, [r7, #48]	; 0x30
+ 80013d4:	2300      	movs	r3, #0
+ 80013d6:	633b      	str	r3, [r7, #48]	; 0x30
 	ADC_Initstructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_T1_CC1;
- 800140a:	2300      	movs	r3, #0
- 800140c:	62fb      	str	r3, [r7, #44]	; 0x2c
+ 80013d8:	2300      	movs	r3, #0
+ 80013da:	62fb      	str	r3, [r7, #44]	; 0x2c
 	ADC_Initstructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;
- 800140e:	2300      	movs	r3, #0
- 8001410:	62bb      	str	r3, [r7, #40]	; 0x28
+ 80013dc:	2300      	movs	r3, #0
+ 80013de:	62bb      	str	r3, [r7, #40]	; 0x28
 	ADC_Initstructure.ADC_NbrOfConversion = 1;
- 8001412:	2301      	movs	r3, #1
- 8001414:	f887 3034 	strb.w	r3, [r7, #52]	; 0x34
+ 80013e0:	2301      	movs	r3, #1
+ 80013e2:	f887 3034 	strb.w	r3, [r7, #52]	; 0x34
 	ADC_Initstructure.ADC_Resolution = ADC_Resolution_12b;
- 8001418:	2300      	movs	r3, #0
- 800141a:	623b      	str	r3, [r7, #32]
+ 80013e6:	2300      	movs	r3, #0
+ 80013e8:	623b      	str	r3, [r7, #32]
 	ADC_Initstructure.ADC_ScanConvMode = DISABLE;
- 800141c:	2300      	movs	r3, #0
- 800141e:	f887 3024 	strb.w	r3, [r7, #36]	; 0x24
+ 80013ea:	2300      	movs	r3, #0
+ 80013ec:	f887 3024 	strb.w	r3, [r7, #36]	; 0x24
 
 	ADC_Init(ADC1, &ADC_Initstructure);
- 8001422:	f107 0320 	add.w	r3, r7, #32
- 8001426:	4619      	mov	r1, r3
- 8001428:	4813      	ldr	r0, [pc, #76]	; (8001478 <ADC1_LightInit+0x104>)
- 800142a:	f7fe ffeb 	bl	8000404 <ADC_Init>
+ 80013f0:	f107 0320 	add.w	r3, r7, #32
+ 80013f4:	4619      	mov	r1, r3
+ 80013f6:	4813      	ldr	r0, [pc, #76]	; (8001444 <ADC1_LightInit+0x104>)
+ 80013f8:	f7ff f804 	bl	8000404 <ADC_Init>
 
 	//Polling
 	ADC_EOCOnEachRegularChannelCmd(ADC1, ENABLE);
- 800142e:	2101      	movs	r1, #1
- 8001430:	4811      	ldr	r0, [pc, #68]	; (8001478 <ADC1_LightInit+0x104>)
- 8001432:	f7ff f95b 	bl	80006ec <ADC_EOCOnEachRegularChannelCmd>
+ 80013fc:	2101      	movs	r1, #1
+ 80013fe:	4811      	ldr	r0, [pc, #68]	; (8001444 <ADC1_LightInit+0x104>)
+ 8001400:	f7ff f974 	bl	80006ec <ADC_EOCOnEachRegularChannelCmd>
 	ADC_ContinuousModeCmd(ADC1, DISABLE);
- 8001436:	2100      	movs	r1, #0
- 8001438:	480f      	ldr	r0, [pc, #60]	; (8001478 <ADC1_LightInit+0x104>)
- 800143a:	f7ff f973 	bl	8000724 <ADC_ContinuousModeCmd>
+ 8001404:	2100      	movs	r1, #0
+ 8001406:	480f      	ldr	r0, [pc, #60]	; (8001444 <ADC1_LightInit+0x104>)
+ 8001408:	f7ff f98c 	bl	8000724 <ADC_ContinuousModeCmd>
 	ADC_DiscModeChannelCountConfig(ADC1, 1);
- 800143e:	2101      	movs	r1, #1
- 8001440:	480d      	ldr	r0, [pc, #52]	; (8001478 <ADC1_LightInit+0x104>)
- 8001442:	f7ff f98b 	bl	800075c <ADC_DiscModeChannelCountConfig>
+ 800140c:	2101      	movs	r1, #1
+ 800140e:	480d      	ldr	r0, [pc, #52]	; (8001444 <ADC1_LightInit+0x104>)
+ 8001410:	f7ff f9a4 	bl	800075c <ADC_DiscModeChannelCountConfig>
 	ADC_DiscModeCmd(ADC1, ENABLE);
- 8001446:	2101      	movs	r1, #1
- 8001448:	480b      	ldr	r0, [pc, #44]	; (8001478 <ADC1_LightInit+0x104>)
- 800144a:	f7ff f9a9 	bl	80007a0 <ADC_DiscModeCmd>
+ 8001414:	2101      	movs	r1, #1
+ 8001416:	480b      	ldr	r0, [pc, #44]	; (8001444 <ADC1_LightInit+0x104>)
+ 8001418:	f7ff f9c2 	bl	80007a0 <ADC_DiscModeCmd>
 
-	ADC_RegularChannelConfig(ADC1, ADC_Channel, 1, ADC_SampleTime_15Cycles);
- 800144e:	7879      	ldrb	r1, [r7, #1]
- 8001450:	2301      	movs	r3, #1
- 8001452:	2201      	movs	r2, #1
- 8001454:	4808      	ldr	r0, [pc, #32]	; (8001478 <ADC1_LightInit+0x104>)
- 8001456:	f7ff f86f 	bl	8000538 <ADC_RegularChannelConfig>
+	ADC_RegularChannelConfig(ADC1, ADC_Channel, 1, ADC_SampleTime_144Cycles);
+ 800141c:	7879      	ldrb	r1, [r7, #1]
+ 800141e:	2306      	movs	r3, #6
+ 8001420:	2201      	movs	r2, #1
+ 8001422:	4808      	ldr	r0, [pc, #32]	; (8001444 <ADC1_LightInit+0x104>)
+ 8001424:	f7ff f888 	bl	8000538 <ADC_RegularChannelConfig>
 
 	ADC_Cmd(ADC1, ENABLE);
- 800145a:	2101      	movs	r1, #1
- 800145c:	4806      	ldr	r0, [pc, #24]	; (8001478 <ADC1_LightInit+0x104>)
- 800145e:	f7ff f84f 	bl	8000500 <ADC_Cmd>
+ 8001428:	2101      	movs	r1, #1
+ 800142a:	4806      	ldr	r0, [pc, #24]	; (8001444 <ADC1_LightInit+0x104>)
+ 800142c:	f7ff f868 	bl	8000500 <ADC_Cmd>
 }
- 8001462:	bf00      	nop
- 8001464:	3738      	adds	r7, #56	; 0x38
- 8001466:	46bd      	mov	sp, r7
- 8001468:	bd80      	pop	{r7, pc}
- 800146a:	bf00      	nop
- 800146c:	40020800 	.word	0x40020800
- 8001470:	40020000 	.word	0x40020000
- 8001474:	40020400 	.word	0x40020400
- 8001478:	40012000 	.word	0x40012000
+ 8001430:	bf00      	nop
+ 8001432:	3738      	adds	r7, #56	; 0x38
+ 8001434:	46bd      	mov	sp, r7
+ 8001436:	bd80      	pop	{r7, pc}
+ 8001438:	40020800 	.word	0x40020800
+ 800143c:	40020000 	.word	0x40020000
+ 8001440:	40020400 	.word	0x40020400
+ 8001444:	40012000 	.word	0x40012000
+
+08001448 <Calculate_time>:
+
+/*
+ * Ham tinh toan thoi gian (Hieu thoi gian)
+ */
+uint32_t Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent){
+ 8001448:	b480      	push	{r7}
+ 800144a:	b085      	sub	sp, #20
+ 800144c:	af00      	add	r7, sp, #0
+ 800144e:	6078      	str	r0, [r7, #4]
+ 8001450:	6039      	str	r1, [r7, #0]
+	uint32_t TimeTotal;
+	if (TimeInit >= TimeCurrent){
+ 8001452:	687a      	ldr	r2, [r7, #4]
+ 8001454:	683b      	ldr	r3, [r7, #0]
+ 8001456:	429a      	cmp	r2, r3
+ 8001458:	d304      	bcc.n	8001464 <Calculate_time+0x1c>
+		TimeTotal = TimeCurrent - TimeInit;
+ 800145a:	683a      	ldr	r2, [r7, #0]
+ 800145c:	687b      	ldr	r3, [r7, #4]
+ 800145e:	1ad3      	subs	r3, r2, r3
+ 8001460:	60fb      	str	r3, [r7, #12]
+ 8001462:	e004      	b.n	800146e <Calculate_time+0x26>
+	}else {
+		TimeTotal = 0xFFFFFFFFU + TimeCurrent - TimeInit;
+ 8001464:	683a      	ldr	r2, [r7, #0]
+ 8001466:	687b      	ldr	r3, [r7, #4]
+ 8001468:	1ad3      	subs	r3, r2, r3
+ 800146a:	3b01      	subs	r3, #1
+ 800146c:	60fb      	str	r3, [r7, #12]
+	}
+	return TimeTotal;
+ 800146e:	68fb      	ldr	r3, [r7, #12]
+}
+ 8001470:	4618      	mov	r0, r3
+ 8001472:	3714      	adds	r7, #20
+ 8001474:	46bd      	mov	sp, r7
+ 8001476:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 800147a:	4770      	bx	lr
 
 0800147c <ADC_GetValue>:
+void Delay(uint32_t ms){
+	uint32_t buff = GetMilSecTick();
+	while (Calculate_time(buff, GetMilSecTick()) <= ms);
+}
 
 uint16_t ADC_GetValue(uint16_t ADC_Channel){
  800147c:	b580      	push	{r7, lr}
@@ -3548,6 +3560,9 @@ uint16_t ADC_GetValue(uint16_t ADC_Channel){
 
 080014d0 <Led_ControlPWM>:
 
+/*
+ * Ham bam xung PWM
+ */
 static void Led_ControlPWM(uint8_t dutyCycle){
  80014d0:	b580      	push	{r7, lr}
  80014d2:	b082      	sub	sp, #8
@@ -3667,7 +3682,7 @@ LoopFillZerobss:
  800154e:	f000 f811 	bl	8001574 <__libc_init_array>
 /* Call the application's entry point.*/
   bl main
- 8001552:	f7ff fe49 	bl	80011e8 <main>
+ 8001552:	f7ff fe2f 	bl	80011b4 <main>
 
 08001556 <LoopForever>:
 

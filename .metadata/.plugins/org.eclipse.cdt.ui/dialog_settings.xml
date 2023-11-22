@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<item key="LastUsedHeaderTemplate" value="Default C header template"/>
-	<item key="org.eclipse.cdt.utils.ui.controls.FileListControl" value="${workspace_loc:/${ProjName}/SDK_1.0.3_NUCLEO-F401RE/lib_stm}"/>
+	<item key="org.eclipse.cdt.utils.ui.controls.FileListControl" value="${workspace_loc:/${ProjName}/SDK_ROBI_STM32F0_1.0.0/lib_stm}"/>
 	<section name="completion_proposal_size">
 	</section>
 	<section name="org.eclipse.cdt.ui.text.hover.CMacroExpansionExploration">
@@ -17,5 +17,22 @@
 		<item key="updateReferences" value="true"/>
 	</section>
 	<section name="NewClassWizardPage">
+	</section>
+	<section name="org.eclipse.cdt.internal.ui.browser.opentype.OpenTypeActionSettings">
+		<item key="show_namespaces" value="true"/>
+		<item key="show_classes" value="true"/>
+		<item key="show_structs" value="true"/>
+		<item key="show_typedefs" value="true"/>
+		<item key="show_enums" value="true"/>
+		<item key="show_unions" value="true"/>
+		<item key="show_functions" value="true"/>
+		<item key="show_variables" value="true"/>
+		<item key="show_enumerators" value="true"/>
+		<item key="show_macros" value="true"/>
+		<item key="show_lowlevel" value="true"/>
+		<item key="x" value="678"/>
+		<item key="y" value="86"/>
+		<item key="width" value="565"/>
+		<item key="height" value="681"/>
 	</section>
 </section>
