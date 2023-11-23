@@ -20,8 +20,8 @@
 /******************************************************************************/
 /*                     PRIVATE TYPES and DEFINITIONS                         */
 /******************************************************************************/
-#define GPIO_PIN_SET 				1
-#define GPIO_PIN_RESET 				0
+#define GPIO_PIN_SET 					1
+#define GPIO_PIN_RESET 					0
 
 #define LEDGREEN1_GPIO_PORT 			GPIOA
 #define LEDGREEN1_GPIO_PIN				GPIO_Pin_0
@@ -40,50 +40,21 @@
 #define SYSCFG_GPIO_RCC					RCC_APB2Periph_SYSCFG
 
 /******************************************************************************/
-/*                     EXPORTED TYPES and DEFINITIONS                         */
-/******************************************************************************/
-uint32_t Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent){
-	uint32_t TimeTotal;
-	if (TimeInit >= TimeCurrent){
-		TimeTotal = TimeCurrent - TimeInit;
-	}else {
-		TimeTotal = 0xFFFFFFFFU + TimeCurrent - TimeInit;
-	}
-	return TimeTotal;
-}
-
-void Delay(uint32_t ms){
-	uint32_t buff = GetMilSecTick();
-	while (Calculate_time(buff, GetMilSecTick()) <= ms);
-}
-
-/******************************************************************************/
-/*                              PRIVATE DATA                                  */
-/******************************************************************************/
-
-/******************************************************************************/
-/*                              EXPORTED DATA                                 */
-/******************************************************************************/
-
-/******************************************************************************/
 /*                            PRIVATE FUNCTIONS                               */
 /******************************************************************************/
-void TimPWM_Init(void);
-static void Led_ControlPWM(uint8_t dutyCycle);
-//static void Led_Init(void);
-//void Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status);
-//void Green_control(uint8_t status);
-//void LedGreen_blink(uint8_t NumBlink);
+void 				TimPWM_Init(void);
+void 				Delay(uint32_t ms);
+void 				AppInitCommon();
+static void 		Led_ControlPWM(uint8_t dutyCycle);
+uint32_t 			Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent);
 
 /******************************************************************************/
 /*                            EXPORTED FUNCTIONS                              */
 /******************************************************************************/
 int main(void)
 {
-	SystemCoreClockUpdate();
-	TimPWM_Init();
-	TimerInit();
-	SystemInit();
+	AppInitCommon();
+
 	while (1){
 		for (int i = 0; i< 100 ; i++){
 			Led_ControlPWM(i);
@@ -93,6 +64,32 @@ int main(void)
    }
 }
 /******************************************************************************/
+/**
+ * @func   AppInitCommon
+ * @brief  Initialize common application
+ * @param  None
+ * @retval None
+ */
+void AppInitCommon(){
+	//Init the System
+	SystemCoreClockUpdate();
+
+	//Init the Timer in PWM mode
+	TimPWM_Init();
+
+	//Init the Timer Basic
+	TimerInit();
+
+	//Init the System
+	SystemInit();
+}
+
+/**
+ * @func   TimPWM_Init
+ * @brief  Initialize the Timer in PWM mode
+ * @param  None
+ * @retval None
+ */
 void TimPWM_Init(void){
 	//Init typedef
 	TIM_TimeBaseInitTypeDef TIM_Initstructe;
@@ -136,6 +133,12 @@ void TimPWM_Init(void){
 	TIM_CtrlPWMOutputs(TIM_INSTANCE, ENABLE);
 }
 
+/**
+ * @func   Led_ControlPWM
+ * @brief  Control the Amplititude light of Led using PWM
+ * @param  dutyCycle
+ * @retval None
+ */
 static void Led_ControlPWM(uint8_t dutyCycle){
 	static uint32_t pulse_length = 0;
 	if (dutyCycle >= 100) return;
@@ -144,52 +147,29 @@ static void Led_ControlPWM(uint8_t dutyCycle){
 	TIM_SetCompare4(TIM_INSTANCE, pulse_length);
 }
 
-//static void Led_Init(void){
-//	//Khai bao kieu du lieu
-//	GPIO_InitTypeDef GPIO_Initstruct;
-//
-//	//Bat block cho GPIOA va GPIOB
-//	RCC_AHB1PeriphClockCmd(LED_GPIO_RCC, ENABLE);
-//
-//	//Khoi tao cac gia tri ban dau cho GREEN1
-//	GPIO_Initstruct.GPIO_Pin = LEDGREEN1_GPIO_PIN;
-//	GPIO_Initstruct.GPIO_Mode = GPIO_Mode_OUT;
-//	GPIO_Initstruct.GPIO_Speed = GPIO_Speed_50MHz;
-//	GPIO_Initstruct.GPIO_OType = GPIO_OType_PP;
-//	GPIO_Init(LEDGREEN1_GPIO_PORT, &GPIO_Initstruct);
-//
-//	//Khoi tao cac gia tri ban dau cho GREEN2
-//	GPIO_Initstruct.GPIO_Pin = LEDGREEN2_GPIO_PIN;
-//	GPIO_Initstruct.GPIO_Mode = GPIO_Mode_OUT;
-//	GPIO_Initstruct.GPIO_Speed = GPIO_Speed_50MHz;
-//	GPIO_Initstruct.GPIO_OType = GPIO_OType_PP;
-//	GPIO_Init(LEDGREEN2_GPIO_PORT, &GPIO_Initstruct);
-//
-//}
-//
-//void Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status){
-//	if (status == GPIO_PIN_SET){
-//		GPIO_SetBits(GPIOx, GPIO_Pin);
-//	}else if(status == GPIO_PIN_RESET){
-//		GPIO_ResetBits(GPIOx, GPIO_Pin);
-//	}
-//}
+/**
+ * @func   CalculateTime
+ * @brief  Calculate the time betwen 2 time.
+ * @param  Time now, Time Miles
+ * @retval Timenow - Time Miles
+ */
+uint32_t Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent){
+	uint32_t TimeTotal;
+	if (TimeInit >= TimeCurrent){
+		TimeTotal = TimeCurrent - TimeInit;
+	}else {
+		TimeTotal = 0xFFFFFFFFU + TimeCurrent - TimeInit;
+	}
+	return TimeTotal;
+}
 
-//void Green_control(uint8_t status){
-//	if (status == GPIO_PIN_SET){
-//		Led_control(LEDGREEN1_GPIO_PORT, LEDGREEN1_GPIO_PIN, GPIO_PIN_SET);
-//		Led_control(LEDGREEN2_GPIO_PORT, LEDGREEN2_GPIO_PIN, GPIO_PIN_SET);
-//	}else if(status == GPIO_PIN_RESET){
-//		Led_control(LEDGREEN1_GPIO_PORT, LEDGREEN1_GPIO_PIN, GPIO_PIN_RESET);
-//		Led_control(LEDGREEN2_GPIO_PORT, LEDGREEN2_GPIO_PIN, GPIO_PIN_RESET);
-//	}
-//}
-//
-//void LedGreen_blink(uint8_t NumBlink){
-//	for (int i = 0; i < NumBlink; i++){
-//		Green_control(1);
-//		Delay(100);
-//		Green_control(0);
-//		Delay(100);
-//	}
-//}
+/**
+ * @func   Delay
+ * @brief  Delay the time
+ * @param  Time delay
+ * @retval None
+ */
+void Delay(uint32_t ms){
+	uint32_t buff = GetMilSecTick();
+	while (Calculate_time(buff, GetMilSecTick()) <= ms);
+}

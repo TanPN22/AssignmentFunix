@@ -1,25 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="ucg_DrawString"/>
+		<item key="selection" value="timeRising"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
-			<item value="ucg_DrawString"/>
-			<item value="void ucg_MyDrawString(ucg_t *ucg, ucg_int_t x, ucg_int_t y, uint8_t dir,char *str){"/>
-			<item value="(const char *)"/>
-			<item value="SPI"/>
-			<item value="Control"/>
-			<item value="pincon"/>
-			<item value="pin"/>
-			<item value="Caculate_time"/>
-			<item value="SYSCFG"/>
+			<item value="Tim_Rising"/>
+			<item value="Number_Press"/>
+			<item value="statusOf Button"/>
+			<item value="Status"/>
+			<item value="Recive_Data_Slave"/>
+			<item value="Recive_Data"/>
+			<item value="Time_now"/>
+			<item value="ADC_Val"/>
+			<item value="BuffB4"/>
+			<item value="BuffB2"/>
+			<item value="timingDelay"/>
+			<item value="TimeStartpressB4"/>
+			<item value="StaB3"/>
+			<item value="TimeStartpressB2"/>
+			<item value="TimepressB3"/>
 		</list>
 		<list key="replacehistory">
-			<item value="I2C"/>
+			<item value="timeRising"/>
+			<item value="numberPressButton"/>
+			<item value="statusOfButton"/>
+			<item value="statusOf Button"/>
+			<item value="reciveDataSlave"/>
+			<item value="reciveData"/>
+			<item value="timeNow"/>
+			<item value="getAdcVal"/>
+			<item value="statusTerminalB4"/>
+			<item value="statusTerminalB2"/>
+			<item value="timeDelay"/>
+			<item value="timeStartpressB4"/>
+			<item value="staB3"/>
+			<item value="timeStartPressB2"/>
+			<item value="timePressB3"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

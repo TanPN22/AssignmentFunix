@@ -1,4 +1,4 @@
- /* File name: Lab 7.1 / 7.2 / 7.3
+ /* File name: Lab 7.1
  *
  * Description:
  *
@@ -39,37 +39,23 @@
 #define SYSCFG_GPIO_RCC					RCC_APB2Periph_SYSCFG
 
 /******************************************************************************/
-/*                     EXPORTED TYPES and DEFINITIONS                         */
-/******************************************************************************/
-
-
-/******************************************************************************/
-/*                              PRIVATE DATA                                  */
-/******************************************************************************/
-
-/******************************************************************************/
-/*                              EXPORTED DATA                                 */
-/******************************************************************************/
-
-/******************************************************************************/
 /*                            PRIVATE FUNCTIONS                               */
 /******************************************************************************/
-void Tim_Init();
-void TimBasic_Init(void);
-static void Led_Init(void);
-void Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status);
-void Green_control(uint8_t status);
-void LedGreen_blink(uint8_t NumBlink);
-void Delay(uint32_t ms);
+void 									Tim_Init();
+void 									TimBasic_Init(void);
+void 									Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status);
+void 									Green_control(uint8_t status);
+void 									LedGreen_blink(uint8_t NumBlink);
+void 									Delay(uint32_t ms);
+void 									AppInitCommon(void);
+static void 							Led_Init(void);
 
 /******************************************************************************/
 /*                            EXPORTED FUNCTIONS                              */
 /******************************************************************************/
 int main(void)
 {
-	Led_Init();
-	TimBasic_Init();
-	SystemCoreClockUpdate();
+	AppInitCommon();
 
 	while (1){
 		Green_control(1);
@@ -79,6 +65,29 @@ int main(void)
    }
 }
 /******************************************************************************/
+/**
+ * @func   AppInitCommon
+ * @brief  Initialize common application
+ * @param  None
+ * @retval None
+ */
+void AppInitCommon(void){
+	//Init the Led
+	Led_Init();
+
+	//Init the Timer
+	TimBasic_Init();
+
+	//Init the System
+	SystemCoreClockUpdate();
+}
+
+/**
+ * @func   TimBasic_Init
+ * @brief  Initialize the Timer Basic
+ * @param  None
+ * @retval None
+ */
 void TimBasic_Init(void){
 	//Init typedef
 	TIM_TimeBaseInitTypeDef TIM_Initstructe;
@@ -95,7 +104,12 @@ void TimBasic_Init(void){
 	TIM_Cmd(TIM_INSTANCE, ENABLE);
 
 }
-
+/**
+ * @func   Delay
+ * @brief  Delay the time using Timer.
+ * @param  Time delay
+ * @retval None
+ */
 void Delay(uint32_t ms){
 	while (ms != 0){
 		TIM_SetCounter(TIM_INSTANCE, 0);
@@ -104,6 +118,12 @@ void Delay(uint32_t ms){
 	}
 }
 
+/**
+ * @func   Led_Init
+ * @brief  Initialize the Led
+ * @param  None
+ * @retval None
+ */
 static void Led_Init(void){
 	//Khai bao kieu du lieu
 	GPIO_InitTypeDef GPIO_Initstruct;
@@ -127,6 +147,12 @@ static void Led_Init(void){
 
 }
 
+/**
+ * @func   Led_control
+ * @brief  Control the Led
+ * @param  GPIOx, GPIO_Pin, status
+ * @retval None.
+ */
 void Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status){
 	if (status == GPIO_PIN_SET){
 		GPIO_SetBits(GPIOx, GPIO_Pin);
@@ -135,6 +161,12 @@ void Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status){
 	}
 }
 
+/**
+ * @func   Green_control
+ * @brief  Control the Led Green
+ * @param  status
+ * @retval None.
+ */
 void Green_control(uint8_t status){
 	if (status == GPIO_PIN_SET){
 		Led_control(LEDGREEN1_GPIO_PORT, LEDGREEN1_GPIO_PIN, GPIO_PIN_SET);
@@ -145,6 +177,12 @@ void Green_control(uint8_t status){
 	}
 }
 
+/**
+ * @func   LedGreen_blink
+ * @brief  Blink the Green Led
+ * @param  Number of Blinking
+ * @retval None.
+ */
 void LedGreen_blink(uint8_t NumBlink){
 	for (int i = 0; i < NumBlink; i++){
 		Green_control(1);

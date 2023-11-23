@@ -25,7 +25,6 @@
 
 
 //--------------------Macro------------------
-static ucg_t ucg;
 #define GPIO_PIN_SET 			1
 #define GPIO_PIN_RESET 			0
 
@@ -38,7 +37,47 @@ static ucg_t ucg;
 #define BUTTON_GPIO_RCC			RCC_AHB1Periph_GPIOB
 
 
-//--------------------Init stat--------------
+//-----------------Nguyen mau ham---------------
+void 					AppInitCommon();
+static void 			Buzzer_Init(void);
+static void 			Button_Init(void);
+static void 			Buzzer_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status);
+static uint8_t 			Button_GetLogic(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
+
+//----------------------------------------------
+int main(void)
+{
+	//Init the parameter
+	AppInitCommon();
+
+	while (1){
+	uint8_t sta = Button_GetLogic(BUTTON_GPIO_PORT, BUTTON_GPIO_PIN);
+	Buzzer_control(BUZZER_GPIO_PORT, BUZZER_GPIO_PIN, sta);
+	}
+}
+
+//---------------------------------------------------
+/**
+ * @func   AppInitCommon
+ * @brief  Initialize common application
+ * @param  None
+ * @retval None
+ */
+void AppInitCommon(){
+
+	//Initzation the Buzzer
+	Buzzer_Init();
+
+	//initzation the Button
+	Button_Init();
+}
+
+/**
+ * @func   Buzzer_Init
+ * @brief  Initialize the buzzer
+ * @param  None
+ * @retval None
+ */
 static void Buzzer_Init(void){
 	//Khai bao kieu du lieu
 	GPIO_InitTypeDef GPIO_Initstruct;
@@ -62,6 +101,12 @@ static void Buzzer_Init(void){
 	GPIO_Init(BUZZER_GPIO_PORT, &GPIO_Initstruct);
 }
 
+/**
+ * @func   Button_Init
+ * @brief  Initialize button
+ * @param  None
+ * @retval None
+ */
 static void Button_Init(void){
 	//Khai bao kieu du lieu
 	GPIO_InitTypeDef GPIO_Initstruct2;
@@ -85,6 +130,12 @@ static void Button_Init(void){
 	GPIO_Init(BUTTON_GPIO_PORT, &GPIO_Initstruct2);
 }
 
+/**
+ * @func   Buzzer_control
+ * @brief  Control the Buzzer
+ * @param  None
+ * @retval None
+ */
 static void Buzzer_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status){
 	if (status == GPIO_PIN_SET){
 		GPIO_SetBits(GPIOx, GPIO_Pin);
@@ -93,30 +144,12 @@ static void Buzzer_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t statu
 	}
 }
 
+/**
+ * @func   Button_GetLogic
+ * @brief  Get logic of the Button.
+ * @param  Port, Pin
+ * @retval Status of Button.(0 or 1)
+ */
 static uint8_t Button_GetLogic(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin){
 	return GPIO_ReadInputDataBit(GPIOx, GPIO_Pin);
-}
-
-//void AppInitCommon(){
-//	char a[] = "Hello World";
-//	const char *p = &a;
-//	TimerInit();
-//	Ucglib4WireSWSPI_begin(&ucg, UCG_FONT_MODE_SOLID);
-//	ucg_ClearScreen(&ucg);
-//	ucg_SetFont(&ucg, ucg_font_ncenR12_hr);
-//	ucg_SetColor(&ucg, 0, 255, 255, 255);
-//	ucg_SetColor(&ucg, 1, 0, 0, 0);
-//	ucg_SetRotate180(&ucg);
-//	ucg_DrawString(&ucg, 60, 24, 0, p);
-//}
-
-int main(void)
-{
-	//AppInitCommon();
-	Buzzer_Init();
-	Button_Init();
-	while (1){
-	uint8_t sta = Button_GetLogic(BUTTON_GPIO_PORT, BUTTON_GPIO_PIN);
-	Buzzer_control(BUZZER_GPIO_PORT, BUZZER_GPIO_PIN, sta);
-	}
 }

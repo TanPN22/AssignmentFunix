@@ -28,6 +28,7 @@
 #define RCC_CR_REG_ADDR 			(RCC_BASE_ADDR + RCC_CR_REG_OFFSET )
 #define GPIOA_BASE_ADDR 			0x40020000UL
 
+//----------------------Val Define------------
 uint32_t *pRccCfgrReg = (uint32_t *)RCC_CFGR_REG_ADDR;
 uint32_t *pRccCrReg = (uint32_t*)RCC_CR_REG_ADDR;
 

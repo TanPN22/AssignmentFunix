@@ -1,4 +1,4 @@
- /* File name: Lab 7.1 / 7.2 / 7.3
+ /* File name: Lab 7.3
  *
  * Description:
  *
@@ -43,45 +43,54 @@
 #define USART_GPIO_RCC					RCC_AHB1Periph_GPIOA
 #define USART_RCC						RCC_APB1Periph_USART2
 
-
-/******************************************************************************/
-/*                     EXPORTED TYPES and DEFINITIONS                         */
-/******************************************************************************/
-uint16_t Number_Press = 0;
-uint16_t Tim_Rising;
-uint8_t Status;
 /******************************************************************************/
 /*                              PRIVATE DATA                                  */
 /******************************************************************************/
-void USART2_Init();
-static void Send_NumberPress(void);
-static void Check_Tim_Press();
-void TIM2_IRQHandler();
-void TimIC_Init(void);
+void 				USART2_Init();
+void 				AppInitCommon(void);
+void 				TIM2_IRQHandler();
+void 				TimIC_Init(void);
+static void 		Send_NumberPress(void);
+static void 		Check_Tim_Press();
 
-/******************************************************************************/
-/*                              EXPORTED DATA                                 */
-/******************************************************************************/
-
-/******************************************************************************/
-/*                            PRIVATE FUNCTIONS                               */
-/******************************************************************************/
-
+uint16_t 			numberPressButton = 0;
+uint16_t 			timeRising;
+uint8_t 			statusOfButton;
 
 /******************************************************************************/
 /*                            EXPORTED FUNCTIONS                              */
 /******************************************************************************/
 int main(void)
 {
-	TimIC_Init();
-	USART2_Init();
-	SystemCoreClockUpdate();
-
+	AppInitCommon();
 	while (1){
 		Send_NumberPress();
    }
 }
 /******************************************************************************/
+/**
+ * @func   AppInitCommon
+ * @brief  Initialize common application
+ * @param  None
+ * @retval None
+ */
+void AppInitCommon(void){
+	//Init the TIMER in Input Capture
+	TimIC_Init();
+
+	//Init the USART2
+	USART2_Init();
+
+	//Init the System
+	SystemCoreClockUpdate();
+}
+
+/**
+ * @func   TimIC_Init
+ * @brief  Initialize Timer in Input Capture mode
+ * @param  None
+ * @retval None
+ */
 void TimIC_Init(void){
 	//Init typedef
 	TIM_TimeBaseInitTypeDef TIM_Initstructe;
@@ -135,40 +144,46 @@ void TimIC_Init(void){
 
 }
 
+/**
+ * @func   TIM2_IRQHandler
+ * @brief  Interupt function of TIMER2.
+ * @param  None
+ * @retval None
+ */
 void TIM2_IRQHandler(){
 
 }
 
-static
-void Check_Tim_Press(){
-	static uint8_t Status1 = 0;
-	Status1 = !Status1;
-	if (Status1 == 1){
-		Number_Press ++;
-	}else if (Status1 == 0){
-		Tim_Rising = TIM_GetCapture2(TIM_INSTANCE);
-		Status = 1;
-	}
-}
-
+/**
+ * @func   Send_NumberPress
+ * @brief  Send Number pressing the button to USART2
+ * @param  None
+ * @retval None
+ */
 static
 void Send_NumberPress(void){
 	uint32_t Tim_SendData = 0;
-	if (Status == 1){
-		if (Tim_Update < Tim_Rising){
-			Tim_SendData = (0xffff + Tim_Update) - Tim_Rising;
+	if (statusOfButton == 1){
+		if (Tim_Update < timeRising){
+			Tim_SendData = (0xffff + Tim_Update) - timeRising;
 		}
 		else {
-			Tim_SendData = Tim_Update - Tim_Rising;
+			Tim_SendData = Tim_Update - timeRising;
 		}
 		if (Tim_SendData > TimLimit_SendData){
-			USART_SendData(USART2, Number_Press);
-			Status = 0;
-			Number_Press = 0;
+			USART_SendData(USART2, numberPressButton);
+			statusOfButton = 0;
+			numberPressButton = 0;
 		}
 	}
 }
 
+/**
+ * @func   USART2_Init
+ * @brief  Initialize the USART2
+ * @param  None
+ * @retval None
+ */
 void USART2_Init(){
 	GPIO_InitTypeDef		GPIO_InitStructe;
 	USART_InitTypeDef		USART_InitStructe;
@@ -200,52 +215,3 @@ void USART2_Init(){
 	USART_Cmd(USART2, ENABLE);
 
 }
-//static void Led_Init(void){
-//	//Khai bao kieu du lieu
-//	GPIO_InitTypeDef GPIO_Initstruct;
-//
-//	//Bat block cho GPIOA va GPIOB
-//	RCC_AHB1PeriphClockCmd(LED_GPIO_RCC, ENABLE);
-//
-//	//Khoi tao cac gia tri ban dau cho GREEN1
-//	GPIO_Initstruct.GPIO_Pin = LEDGREEN1_GPIO_PIN;
-//	GPIO_Initstruct.GPIO_Mode = GPIO_Mode_OUT;
-//	GPIO_Initstruct.GPIO_Speed = GPIO_Speed_50MHz;
-//	GPIO_Initstruct.GPIO_OType = GPIO_OType_PP;
-//	GPIO_Init(LEDGREEN1_GPIO_PORT, &GPIO_Initstruct);
-//
-//	//Khoi tao cac gia tri ban dau cho GREEN2
-//	GPIO_Initstruct.GPIO_Pin = LEDGREEN2_GPIO_PIN;
-//	GPIO_Initstruct.GPIO_Mode = GPIO_Mode_OUT;
-//	GPIO_Initstruct.GPIO_Speed = GPIO_Speed_50MHz;
-//	GPIO_Initstruct.GPIO_OType = GPIO_OType_PP;
-//	GPIO_Init(LEDGREEN2_GPIO_PORT, &GPIO_Initstruct);
-//
-//}
-//
-//void Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status){
-//	if (status == GPIO_PIN_SET){
-//		GPIO_SetBits(GPIOx, GPIO_Pin);
-//	}else if(status == GPIO_PIN_RESET){
-//		GPIO_ResetBits(GPIOx, GPIO_Pin);
-//	}
-//}
-
-//void Green_control(uint8_t status){
-//	if (status == GPIO_PIN_SET){
-//		Led_control(LEDGREEN1_GPIO_PORT, LEDGREEN1_GPIO_PIN, GPIO_PIN_SET);
-//		Led_control(LEDGREEN2_GPIO_PORT, LEDGREEN2_GPIO_PIN, GPIO_PIN_SET);
-//	}else if(status == GPIO_PIN_RESET){
-//		Led_control(LEDGREEN1_GPIO_PORT, LEDGREEN1_GPIO_PIN, GPIO_PIN_RESET);
-//		Led_control(LEDGREEN2_GPIO_PORT, LEDGREEN2_GPIO_PIN, GPIO_PIN_RESET);
-//	}
-//}
-//
-//void LedGreen_blink(uint8_t NumBlink){
-//	for (int i = 0; i < NumBlink; i++){
-//		Green_control(1);
-//		Delay(100);
-//		Green_control(0);
-//		Delay(100);
-//	}
-//}

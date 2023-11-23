@@ -24,7 +24,7 @@
 #include "led.h"
 #include "timer.h"
 
-//------------------------Def--------------------------------------------------
+//------------------------Define-----------------------------------------------
 #define GPIO_PIN_SET 					1
 #define GPIO_PIN_RESET					0
 
@@ -61,47 +61,32 @@
 
 #define SLAVE_DATA_CHECK				0xB1
 
-volatile uint16_t Recive_Data_Slave = 0;
+volatile uint16_t reciveDataSlave = 0;
+
 //--------------------Nguyen mau ham------------------------------
-void SPI2_Init(void);
-void SPI1_Init(void);
-static void Button_Init(void);
-static void Led_Init(void);
-void Pin_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status);
-void SPI_TransmitData(SPI_TypeDef *SPIx, uint8_t data);
-void SPI1_IRQHandler(void);
-void Green_control(uint8_t status);
-static uint8_t Button_GetLogic(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin);
+void 				AppInitCommon(void);
+void 				SPI2_Init(void);
+void 				SPI1_Init(void);
+void 				SPI_TransmitData(SPI_TypeDef *SPIx, uint8_t data);
+void 				SPI1_IRQHandler(void);
+void 				Green_control(uint8_t status);
+void 				Delay(uint32_t ms);
+static void 		Button_Init(void);
+static void 		Led_Init(void);
+static uint32_t 	Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent);
+static uint8_t 		Button_GetLogic(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin);
 
-uint32_t Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent){
-	uint32_t TimeTotal;
-	if (TimeInit >= TimeCurrent){
-		TimeTotal = TimeCurrent - TimeInit;
-	}else {
-		TimeTotal = 0xFFFFFFFFU + TimeCurrent - TimeInit;
-	}
-	return TimeTotal;
-}
-
-void Delay(uint32_t ms){
-	uint32_t buff = GetMilSecTick();
-	while (Calculate_time(buff, GetMilSecTick()) <= ms);
-}
-
+//----------------------------------------------------------------------
 int main(void)
 {
-	SPI1_Init();
-	SPI2_Init();
-	Led_Init();
-	Button_Init();
-	TimerInit();
-	SystemCoreClockUpdate();
-	SystemInit();
+	//Init all the Parameter
+	AppInitCommon();
+
 	while (1){
 		if (Button_GetLogic(BUTTON_GPIO_PORT, BUTTON_GPIO_PIN) == Bit_RESET){
 			SPI_TransmitData(SPI_MASTER_INSTANCE, 0xB1);
 		}
-		if (Recive_Data_Slave == SLAVE_DATA_CHECK)
+		if (reciveDataSlave == SLAVE_DATA_CHECK)
 		{
 			for (int i = 0; i<5; i++){
 				Green_control(1);
@@ -109,13 +94,47 @@ int main(void)
 				Green_control(0);
 				Delay(1000);
 			}
-			Recive_Data_Slave = 0;
+			reciveDataSlave = 0;
 		}
 	}
 }
 
 
 //----------------------Cac ham-----------------------------------
+/**
+ * @func   AppInitCommon
+ * @brief  Initialize common application
+ * @param  None
+ * @retval None
+ */
+void AppInitCommon(void){
+
+	//Initzation the SPI1
+	SPI1_Init();
+
+	//Initzation the SPI2
+	SPI2_Init();
+
+	//Initzation the Led
+	Led_Init();
+
+	//Initzation the Button
+	Button_Init();
+
+	//Initzation the Timer
+	TimerInit();
+
+	//Initzation the system.
+	SystemCoreClockUpdate();
+	SystemInit();
+}
+
+/**
+ * @func   SPI2_Init
+ * @brief  Initialize the SPI2
+ * @param  None
+ * @retval None
+ */
 void SPI2_Init(void){
 	GPIO_InitTypeDef	GPIO_InitStructure;
 	SPI_InitTypeDef		SPI_InitStructure;
@@ -180,6 +199,12 @@ void SPI2_Init(void){
 	SPI_Cmd(SPI_MASTER_INSTANCE, ENABLE);
 }
 
+/**
+ * @func   SPI1_Init
+ * @brief  Initialize the SPI2
+ * @param  None
+ * @retval None
+ */
 void SPI1_Init(void){
 	GPIO_InitTypeDef	GPIO_InitStructure;
 	SPI_InitTypeDef		SPI_InitStructure;
@@ -255,6 +280,12 @@ void SPI1_Init(void){
 	SPI_I2S_ITConfig(SPI_SLAVE_INSTANCE, SPI_I2S_IT_RXNE, ENABLE);
 }
 
+/**
+ * @func   Led_Init
+ * @brief  Initialize the LED
+ * @param  None
+ * @retval None
+ */
 static void Led_Init(void){
 	//Khai bao kieu du lieu
 	GPIO_InitTypeDef GPIO_Initstruct;
@@ -270,6 +301,12 @@ static void Led_Init(void){
 	GPIO_Init(LEDGREEN1_GPIO_PORT, &GPIO_Initstruct);
 }
 
+/**
+ * @func   Button_Init
+ * @brief  Initialize the Button
+ * @param  None
+ * @retval None
+ */
 static void Button_Init(void){
 	//Khai bao kieu du lieu
 	GPIO_InitTypeDef GPIO_Initstruct2;
@@ -286,6 +323,39 @@ static void Button_Init(void){
 	GPIO_Init(BUTTON_GPIO_PORT, &GPIO_Initstruct2);
 }
 
+/**
+ * @func   CalculateTime
+ * @brief  Calculate the time betwen 2 time.
+ * @param  Time now, Time Miles
+ * @retval Timenow - Time Miles
+ */
+static uint32_t Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent){
+	uint32_t TimeTotal;
+	if (TimeInit >= TimeCurrent){
+		TimeTotal = TimeCurrent - TimeInit;
+	}else {
+		TimeTotal = 0xFFFFFFFFU + TimeCurrent - TimeInit;
+	}
+	return TimeTotal;
+}
+
+/**
+ * @func   Delay
+ * @brief  Delay the time
+ * @param  Time delay
+ * @retval None
+ */
+void Delay(uint32_t ms){
+	uint32_t buff = GetMilSecTick();
+	while (Calculate_time(buff, GetMilSecTick()) <= ms);
+}
+
+/**
+ * @func   SPI_TransmitData
+ * @brief  Start transmit the data
+ * @param  SPIx, Data transmit
+ * @retval None
+ */
 void SPI_TransmitData(SPI_TypeDef *SPIx, uint8_t data){
 	//Bat chan NSS de bao tin hieu truyen
 	GPIO_SetBits(SPI_MASTER_GPIO_PORT, SPI_MASTER_NSS_PIN);
@@ -298,11 +368,22 @@ void SPI_TransmitData(SPI_TypeDef *SPIx, uint8_t data){
 	GPIO_ResetBits(SPI_MASTER_GPIO_PORT, SPI_MASTER_NSS_PIN);
 
 }
-
+/**
+ * @func   Button_GetLogic
+ * @brief  Start transmit the data
+ * @param  GPIOx, GPIO_Pin
+ * @retval Logic of button(0 or 1)
+ */
 static uint8_t Button_GetLogic(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin){
 	return GPIO_ReadInputDataBit(GPIOx, GPIO_Pin);
 }
 
+/**
+ * @func   Led_control
+ * @brief  Control the status of LED
+ * @param  GPIOx, GPIO_Pin, status of led
+ * @retval None
+ */
 void Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status){
 	if (status == GPIO_PIN_SET){
 		GPIO_SetBits(GPIOx, GPIO_Pin);
@@ -311,6 +392,12 @@ void Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status){
 	}
 }
 
+/**
+ * @func   Green_control
+ * @brief  Control all the Green Led
+ * @param  status of led
+ * @retval None
+ */
 void Green_control(uint8_t status){
 	if (status == GPIO_PIN_SET){
 		Led_control(LEDGREEN1_GPIO_PORT, LEDGREEN1_GPIO_PIN, GPIO_PIN_SET);
@@ -321,9 +408,15 @@ void Green_control(uint8_t status){
 	}
 }
 
+/**
+ * @func   SPI1_IRQHandler
+ * @brief  The Interupt function of the SPI1. If get a IT signal from SPI1, all Command in this function will run.
+ * @param  None
+ * @retval None
+ */
 void SPI1_IRQHandler(void){
 	if (SPI_I2S_GetITStatus(SPI1, SPI_I2S_IT_RXNE) == SET){
-		Recive_Data_Slave = SPI_I2S_ReceiveData(SPI1);
+		reciveDataSlave = SPI_I2S_ReceiveData(SPI1);
 	}
 	SPI_I2S_ClearITPendingBit(SPI1, SPI_I2S_IT_RXNE);
 }

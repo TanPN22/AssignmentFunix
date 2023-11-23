@@ -1,12 +1,19 @@
-17:04:03 **** Incremental Build of configuration Debug for project robi_exam ****
+22:33:31 **** Incremental Build of configuration Debug for project robi_exam ****
 make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m0 -std=gnu11 -g3 -DSTM32F030X8 -c -I"D:/DH/Lumi/ROBI_BEVA-master/ROBI_BEVA-master/SDK_ROBI_STM32F0_1.0.0/shared/Drivers/CMSIS/Include" -I"D:/DH/Lumi/ROBI_BEVA-master/ROBI_BEVA-master/SDK_ROBI_STM32F0_1.0.0/shared/Drivers/STM32F401RE_StdPeriph_Driver/inc" -I"D:/DH/Lumi/ROBI_BEVA-master/ROBI_BEVA-master/SDK_ROBI_STM32F0_1.0.0/shared/Middle/button" -I"D:/DH/Lumi/ROBI_BEVA-master/ROBI_BEVA-master/SDK_ROBI_STM32F0_1.0.0/shared/Middle/buzzer" -I"D:/DH/Lumi/ROBI_BEVA-master/ROBI_BEVA-master/SDK_ROBI_STM32F0_1.0.0/shared/Middle/lcd" -I"D:/DH/Lumi/ROBI_BEVA-master/ROBI_BEVA-master/SDK_ROBI_STM32F0_1.0.0/shared/Middle/led" -I"D:/DH/Lumi/ROBI_BEVA-master/ROBI_BEVA-master/SDK_ROBI_STM32F0_1.0.0/shared/Middle/motor" -I"D:/DH/Lumi/ROBI_BEVA-master/ROBI_BEVA-master/SDK_ROBI_STM32F0_1.0.0/shared/Middle/rtos" -I"D:/DH/Lumi/ROBI_BEVA-master/ROBI_BEVA-master/SDK_ROBI_STM32F0_1.0.0/shared/Middle/sensor" -I"D:/DH/Lumi/ROBI_BEVA-master/ROBI_BEVA-master/SDK_ROBI_STM32F0_1.0.0/shared/Middle/serial" -I"D:/DH/Lumi/ROBI_BEVA-master/ROBI_BEVA-master/SDK_ROBI_STM32F0_1.0.0/shared/Utilities" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/main.o"
+arm-none-eabi-gcc -o "robi_exam.elf" @"objects.list"  -lLibraries -mcpu=cortex-m0 -T"D:\DH\Lumi\ROBI_BEVA-master\ROBI_BEVA-master\robi_example\STM32F030C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="robi_exam.map" -Wl,--gc-sections -static -L"D:\DH\Lumi\ROBI_BEVA-master\ROBI_BEVA-master\SDK_ROBI_STM32F0_1.0.0\lib_stm" --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: robi_exam.elf
+ 
 arm-none-eabi-size   robi_exam.elf 
+arm-none-eabi-objdump -h -S  robi_exam.elf  > "robi_exam.list"
    text	   data	    bss	    dec	    hex	filename
-  23240	     88	   2744	  26072	   65d8	robi_exam.elf
+  23692	     88	   2744	  26524	   679c	robi_exam.elf
 Finished building: default.size.stdout
+ 
+Finished building: robi_exam.list
  
 arm-none-eabi-objcopy -O ihex robi_exam.elf robi_exam.hex
  
 
-17:04:04 Build Finished. 0 errors, 0 warnings. (took 1s.78ms)
+22:33:32 Build Finished. 0 errors, 0 warnings. (took 1s.161ms)
 

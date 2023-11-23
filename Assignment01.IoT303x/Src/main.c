@@ -71,16 +71,16 @@
 volatile 	uint8_t 	statusOfButton2 = 0;
 volatile 	uint8_t 	statusOfButton3 = 0;
 volatile 	uint8_t 	statusOfButton4 = 0;
-static __IO uint32_t 	TimingDelay;
+static __IO uint32_t 	timeDelay;
 uint8_t					countB3			= 0;
 uint8_t					countB2			= 0;
 uint8_t					countB4			= 0;
-uint16_t 				TimepressB3		   ;
-uint8_t					StaB3			= 0;
-uint16_t 				TimeStartpressB2   ;
-uint16_t				TimeStartpressB4   ;
-uint8_t					BuffB2	= 0		   ;
-uint8_t					BuffB4  = 0		   ;
+uint16_t 				timePressB3		   ;
+uint8_t					staB3			= 0;
+uint16_t 				timeStartPressB2   ;
+uint16_t				timeStartpressB4   ;
+uint8_t					statusTerminalB2	= 0		   ;
+uint8_t					statusTerminalB4  = 0		   ;
 /******************************************************************************/
 /*                            PRIVATE FUNCTIONS                               */
 /******************************************************************************/
@@ -99,7 +99,6 @@ void 				Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status);
 void 				Delay(uint32_t ms);
 void 				LedGreen_blink(uint8_t NumBlink);
 void 				Buzzer_blink(uint8_t BuzzerBlink);
-
 uint32_t 			Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent);
 
 /******************************************************************************/
@@ -117,37 +116,43 @@ int main(void)
 	while (1){
 		statusOfButton2 = !Button_GetLogic(BUTTON2_IT_GPIO_PORT, BUTTON2_IT_GPIO_PIN);
 		statusOfButton4 = !Button_GetLogic(BUTTON4_IT_GPIO_PORT, BUTTON4_IT_GPIO_PIN);
-		if (StaB3 == 1){
+		if (staB3 == 1){
 			LedGreen_blink(5);
 			Buzzer_blink(2);
-			StaB3 = 0;
+			staB3 = 0;
 		}
-		if ((statusOfButton4 == 1) && (Calculate_time(TimeStartpressB4, GetMilSecTick())>500)){
+		if ((statusOfButton4 == 1) && (Calculate_time(timeStartpressB4, GetMilSecTick())>500)){
 			Red_control(1);
-			BuffB4 = 1;
+			statusTerminalB4 = 1;
 		}
-		if ((BuffB4 == 1) && (statusOfButton4 == 0)){
+		if ((statusTerminalB4 == 1) && (statusOfButton4 == 0)){
 			Red_control(0);
-			BuffB4 = 0;
+			statusTerminalB4 = 0;
 		}
 		if (statusOfButton3 == 1) {
 		Green_control(1);
 		statusOfButton3 = 0;
 		}
-		if ((statusOfButton2 == 1) && (Calculate_time(TimeStartpressB2, GetMilSecTick())>500)) {
+		if ((statusOfButton2 == 1) && (Calculate_time(timeStartPressB2, GetMilSecTick())>500)) {
 
 			Blue_control(1);
-			BuffB2 = 1;
+			statusTerminalB2 = 1;
 		}
 
-		if ((BuffB2 == 1) && (statusOfButton2 == 0)){
+		if ((statusTerminalB2 == 1) && (statusOfButton2 == 0)){
 			Blue_control(0);
-			BuffB2 = 0;
+			statusTerminalB2 = 0;
 		}
 
 	}
 }
 /******************************************************************************/
+/**
+ * @func   AppInitCommon
+ * @brief  Initialize common application
+ * @param  None
+ * @retval None
+ */
 void Appinit_Common(){
 	//Khoi tao Led
 	Led_Init();
@@ -168,6 +173,12 @@ void Appinit_Common(){
 	SystemInit();
 }
 
+/**
+ * @func   CalculateTime
+ * @brief  Calculate the time betwen 2 time.
+ * @param  Time now, Time Miles
+ * @retval Timenow - Time Miles
+ */
 //Tinh toan thoi gian
 uint32_t Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent){
 	uint32_t TimeTotal;
@@ -179,12 +190,24 @@ uint32_t Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent){
 	return TimeTotal;
 }
 
+/**
+ * @func   Delay
+ * @brief  Delay the time
+ * @param  Time delay
+ * @retval None
+ */
 //Khoi tao ham Delay
 void Delay(uint32_t ms){
 	uint32_t buff = GetMilSecTick();
 	while (Calculate_time(buff, GetMilSecTick()) <= ms);
 }
 
+/**
+ * @func   LedInit
+ * @brief  Initialize the parameter of the Led
+ * @param  None
+ * @retval None
+ */
 //Khoi tao ham led
 static void Led_Init(void){
 	//Khai bao kieu du lieu
@@ -237,6 +260,12 @@ static void Led_Init(void){
 	GPIO_Init(LEDBLUE2_GPIO_PORT, &GPIO_Initstruct);
 }
 
+/**
+ * @func   ButtonItInit
+ * @brief  Initialize the Button as a IT button
+ * @param  None
+ * @retval None
+ */
 static void Button_IT_Init(void){
 	//Khai bao kieu du lieu
 	GPIO_InitTypeDef GPIO_Initstruct2;
@@ -326,6 +355,12 @@ static void Button_IT_Init(void){
 	NVIC_Init(&NVIC_Initstruct2);
 }
 
+/**
+ * @func   BuzzerBlink
+ * @brief  Blink the buzzer
+ * @param  None
+ * @retval None
+ */
 void Buzzer_blink(uint8_t BuzzerBlink){
 	for (int i = 0; i < BuzzerBlink; i++){
 		Buzzer_control(BUZZER_GPIO_PORT, BUZZER_GPIO_PIN, GPIO_PIN_SET);
@@ -335,6 +370,12 @@ void Buzzer_blink(uint8_t BuzzerBlink){
 	}
 }
 
+/**
+ * @func   BuzzerInit
+ * @brief  Initialize the Button
+ * @param  None
+ * @retval None
+ */
 static void Buzzer_Init(void){
 	//Khai bao kieu du lieu
 	GPIO_InitTypeDef GPIO_Initstruct;
@@ -358,6 +399,12 @@ static void Buzzer_Init(void){
 	GPIO_Init(BUZZER_GPIO_PORT, &GPIO_Initstruct);
 }
 
+/**
+ * @func   LedGreenBlink
+ * @brief  Blink all Green Led
+ * @param  Number of blinking
+ * @retval None
+ */
 void LedGreen_blink(uint8_t NumBlink){
 	for (int i = 0; i < NumBlink; i++){
 		Green_control(1);
@@ -367,6 +414,12 @@ void LedGreen_blink(uint8_t NumBlink){
 	}
 }
 
+/**
+ * @func   BuzzerControl
+ * @brief  Control the Buzzer.(On or Off)
+ * @param  Port, Pin, Status of Buzzer.
+ * @retval None
+ */
 static void Buzzer_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status){
 	if (status == GPIO_PIN_SET){
 		GPIO_SetBits(GPIOx, GPIO_Pin);
@@ -375,6 +428,12 @@ static void Buzzer_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t statu
 	}
 }
 
+/**
+ * @func   LedControl
+ * @brief  Control the Led.(On or Off)
+ * @param  Port, Pin, Status of Led.
+ * @retval None
+ */
 void Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status){
 	if (status == GPIO_PIN_SET){
 		GPIO_SetBits(GPIOx, GPIO_Pin);
@@ -383,6 +442,12 @@ void Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status){
 	}
 }
 
+/**
+ * @func   RedControl
+ * @brief  Control the Red Led.(On or Off)
+ * @param  Status of Led.
+ * @retval None
+ */
 void Red_control(uint8_t status){
 	if (status == GPIO_PIN_SET){
 		Led_control(LEDRED1_GPIO_PORT, LEDRED1_GPIO_PIN, GPIO_PIN_SET);
@@ -393,6 +458,12 @@ void Red_control(uint8_t status){
 	}
 }
 
+/**
+ * @func   GreenControl
+ * @brief  Control the Green Led.(On or Off)
+ * @param  Status of Led.
+ * @retval None
+ */
 void Green_control(uint8_t status){
 	if (status == GPIO_PIN_SET){
 		Led_control(LEDGREEN1_GPIO_PORT, LEDGREEN1_GPIO_PIN, GPIO_PIN_SET);
@@ -403,6 +474,12 @@ void Green_control(uint8_t status){
 	}
 }
 
+/**
+ * @func   BlueControl
+ * @brief  Control the Blue Led.(On or Off)
+ * @param  Status of Led.
+ * @retval None
+ */
 void Blue_control(uint8_t status){
 	if (status == GPIO_PIN_SET){
 		Led_control(LEDBLUE1_GPIO_PORT, LEDBLUE1_GPIO_PIN, GPIO_PIN_SET);
@@ -413,28 +490,39 @@ void Blue_control(uint8_t status){
 	}
 }
 
+/**
+ * @func   ButtonGetLogic
+ * @brief  Get the logic form Button.(On or Off)
+ * @param  Port of Button, Pin of Button
+ * @retval On or Off. (O or 1)
+ */
 static uint8_t Button_GetLogic(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin){
 	return GPIO_ReadInputDataBit(GPIOx, GPIO_Pin);
 }
 
-
+/**
+ * @func   EXTI3 IT Handler
+ * @brief  When get Interupt from EXTI3. This code in function will running.
+ * @param  None
+ * @retval None
+ */
 void EXTI3_IRQHandler(void){
 	if (EXTI_GetFlagStatus(EXTI_Line3) == SET){
 		//Button 2;
 		if (countB2 == 0){
-			TimeStartpressB2 = GetMilSecTick();
+			timeStartPressB2 = GetMilSecTick();
 			countB2 ++;
 		}else if (countB2 == 1){
-			if (Calculate_time(TimeStartpressB2, GetMilSecTick()) <= 400){
+			if (Calculate_time(timeStartPressB2, GetMilSecTick()) <= 400){
 				Blue_control(1);
-				TimeStartpressB2 = GetMilSecTick();
+				timeStartPressB2 = GetMilSecTick();
 				countB2 ++;
 			}else {
-				TimeStartpressB2 = GetMilSecTick();
+				timeStartPressB2 = GetMilSecTick();
 				countB2 = 0;
 			}
 		}else {
-			TimeStartpressB2 = GetMilSecTick();
+			timeStartPressB2 = GetMilSecTick();
 			Blue_control(0);
 			countB2 = 0;
 		}
@@ -442,44 +530,56 @@ void EXTI3_IRQHandler(void){
 	EXTI_ClearFlag(EXTI_Line3);
 }
 
+/**
+ * @func   EXTI4 IT Handler
+ * @brief  When get Interupt from EXTI4. This code in function will running.
+ * @param  None
+ * @retval None
+ */
 void EXTI4_IRQHandler(void){
 	if (EXTI_GetFlagStatus(EXTI_Line4) == SET){
 		//Button 3
 		if (countB3 == 0){
 			countB3 ++;
-			TimepressB3 = GetMilSecTick();
-		}else if(countB3 >= 1 && (Calculate_time(TimepressB3, GetMilSecTick()) <= 400)){
-			TimepressB3 = GetMilSecTick();
+			timePressB3 = GetMilSecTick();
+		}else if(countB3 >= 1 && (Calculate_time(timePressB3, GetMilSecTick()) <= 400)){
+			timePressB3 = GetMilSecTick();
 			countB3 ++;
 		}
-		if (Calculate_time(TimepressB3, GetMilSecTick()) > 400){
+		if (Calculate_time(timePressB3, GetMilSecTick()) > 400){
 			countB3 = 0;
 		}
 		if (countB3 == 5){
-			StaB3 = 1;
+			staB3 = 1;
 			countB3 = 0;
 		}
 	}
 	EXTI_ClearFlag(EXTI_Line4);
 }
 
+/**
+ * @func   EXTI0 IT Handler
+ * @brief  When get Interupt from EXTI0. This code in function will running.
+ * @param  None
+ * @retval None
+ */
 void EXTI0_IRQHandler(void){
 	if (EXTI_GetFlagStatus(EXTI_Line0) == SET){
 		//Button 4
 		if (countB4 == 0){
-			TimeStartpressB4 = GetMilSecTick();
+			timeStartpressB4 = GetMilSecTick();
 			countB4 ++;
 		}else if (countB4 == 1){
-			if (Calculate_time(TimeStartpressB4, GetMilSecTick()) <= 400){
+			if (Calculate_time(timeStartpressB4, GetMilSecTick()) <= 400){
 				Red_control(1);
-				TimeStartpressB4 = GetMilSecTick();
+				timeStartpressB4 = GetMilSecTick();
 				countB4 ++;
 			}else {
-				TimeStartpressB4 = GetMilSecTick();
+				timeStartpressB4 = GetMilSecTick();
 				countB4 = 0;
 			}
 		}else {
-			TimeStartpressB4 = GetMilSecTick();
+			timeStartpressB4 = GetMilSecTick();
 			Red_control(0);
 			countB4 = 0;
 		}

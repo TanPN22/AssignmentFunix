@@ -63,45 +63,29 @@
 #define DATA_RCV_VALID					0x10
 #define DATA_RCV_IDLE					0x00
 
-static uint16_t Recive_Data = DATA_RCV_IDLE;
 //--------------------Nguyen mau ham------------------------------
-void I2C3_Init(void);
-void I2C1_Init(void);
-void I2C1_EV_IRQHandler(void);
-static void Led_Init(void);
-static void Button_Init(void);
-void I2C_Start(void);
-void I2C_SendAddress(uint8_t address);
-void I2C_TransmitData(uint8_t data);
-void I2C_Stop(void);
-static uint8_t Button_GetLogic(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin);
-void Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status);
-void Green_control(uint8_t status);
+void 					I2C3_Init(void);
+void 					I2C1_Init(void);
+void 					I2C1_EV_IRQHandler(void);
+void 					I2C_Start(void);
+void 					I2C_SendAddress(uint8_t address);
+void 					I2C_TransmitData(uint8_t data);
+void 					I2C_Stop(void);
+void 					Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status);
+void 					Green_control(uint8_t status);
+void 					Delay(uint32_t ms);
+void 					AppInitCommon(void);
+static void 			Led_Init(void);
+static void 			Button_Init(void);
+static uint8_t 			Button_GetLogic(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin);
+static uint32_t 		Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent);
 
-uint32_t Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent){
-	uint32_t TimeTotal;
-	if (TimeInit >= TimeCurrent){
-		TimeTotal = TimeCurrent - TimeInit;
-	}else {
-		TimeTotal = 0xFFFFFFFFU + TimeCurrent - TimeInit;
-	}
-	return TimeTotal;
-}
+static uint16_t 		reciveData = DATA_RCV_IDLE;
 
-void Delay(uint32_t ms){
-	uint32_t buff = GetMilSecTick();
-	while (Calculate_time(buff, GetMilSecTick()) <= ms);
-}
-
+//------------------------------------------------------------------
 int main(void)
 {
-	I2C1_Init();
-	I2C3_Init();
-	Led_Init();
-	Button_Init();
-	TimerInit();
-	SystemCoreClockUpdate();
-	SystemInit();
+	AppInitCommon();
 
 	while (1){
 		if (Button_GetLogic(BUTTON_GPIO_PORT, BUTTON_GPIO_PIN) == Bit_RESET){
@@ -110,7 +94,7 @@ int main(void)
 			I2C_TransmitData(DATA_RCV_VALID);
 			I2C_Stop();
 		}
-		if (Recive_Data == DATA_RCV_VALID)
+		if (reciveData == DATA_RCV_VALID)
 		{
 			for (int i = 0; i<5; i++){
 				Green_control(1);
@@ -118,13 +102,47 @@ int main(void)
 				Green_control(0);
 				Delay(1000);
 			}
-			Recive_Data = DATA_RCV_IDLE;
+			reciveData = DATA_RCV_IDLE;
 		}
 	}
 }
 
 
 //----------------------Cac ham-----------------------------------
+/**
+ * @func   AppInitCommon
+ * @brief  Initialize common application
+ * @param  None
+ * @retval None
+ */
+void AppInitCommon(void){
+
+	//Init the I2C1
+	I2C1_Init();
+
+	//Init the I2C3
+	I2C3_Init();
+
+	//Init the led
+	Led_Init();
+
+	//Init the button
+	Button_Init();
+
+	//Init the timer
+	TimerInit();
+
+	//Init the system
+	SystemCoreClockUpdate();
+	SystemInit();
+}
+
+/**
+ * @func   I2C3_Init
+ * @brief  Initialize the I2C3
+ * @param  None
+ * @retval None
+ */
 void I2C3_Init(void){
 	GPIO_InitTypeDef	GPIO_InitStructure;
 	I2C_InitTypeDef		I2C_InitStructure;
@@ -169,6 +187,12 @@ void I2C3_Init(void){
 	I2C_Cmd(I2C_MASTER_INSTANCE, ENABLE);
 }
 
+/**
+ * @func   I2C1_Init
+ * @brief  Initialize the I2C1
+ * @param  None
+ * @retval None
+ */
 void I2C1_Init(void){
 	GPIO_InitTypeDef	GPIO_InitStructure;
 	I2C_InitTypeDef		I2C_InitStructure;
@@ -225,6 +249,12 @@ void I2C1_Init(void){
 	NVIC_Init(&NVIC_InitStructure);
 }
 
+/**
+ * @func   I2C1_EV_IRQHandler
+ * @brief  The Interupt function of I2C1
+ * @param  None
+ * @retval None
+ */
 void I2C1_EV_IRQHandler(void){
 	switch (I2C_GetLastEvent(I2C_SLAVE_INSTANCE)){
 	case I2C_EVENT_SLAVE_RECEIVER_ADDRESS_MATCHED:
@@ -234,7 +264,7 @@ void I2C1_EV_IRQHandler(void){
 		break;
 	case I2C_EVENT_SLAVE_BYTE_RECEIVED:
 
-		Recive_Data = I2C_ReceiveData(I2C_SLAVE_INSTANCE);
+		reciveData = I2C_ReceiveData(I2C_SLAVE_INSTANCE);
 
 		I2C_ClearFlag(I2C_SLAVE_INSTANCE, I2C_FLAG_RXNE);
 		break;
@@ -249,6 +279,12 @@ void I2C1_EV_IRQHandler(void){
 	I2C_ClearITPendingBit(I2C_SLAVE_INSTANCE, I2C_IT_RXNE);
 }
 
+/**
+ * @func   Led_Init
+ * @brief  Initialize the Led
+ * @param  None
+ * @retval None
+ */
 static void Led_Init(void){
 	//Khai bao kieu du lieu
 	GPIO_InitTypeDef GPIO_Initstruct;
@@ -264,6 +300,12 @@ static void Led_Init(void){
 	GPIO_Init(LEDGREEN1_GPIO_PORT, &GPIO_Initstruct);
 }
 
+/**
+ * @func   Button_Init
+ * @brief  Initialize the Button
+ * @param  None
+ * @retval None
+ */
 static void Button_Init(void){
 	//Khai bao kieu du lieu
 	GPIO_InitTypeDef GPIO_Initstruct2;
@@ -280,6 +322,12 @@ static void Button_Init(void){
 	GPIO_Init(BUTTON_GPIO_PORT, &GPIO_Initstruct2);
 }
 
+/**
+ * @func   I2C_Start
+ * @brief  Start the I2C
+ * @param  None
+ * @retval None
+ */
 void I2C_Start(void){
 	//Doi I2Cx khong ban
 	while (I2C_GetFlagStatus(I2C_MASTER_INSTANCE, I2C_FLAG_BUSY));
@@ -289,26 +337,56 @@ void I2C_Start(void){
 	while (!I2C_CheckEvent(I2C_MASTER_INSTANCE, I2C_EVENT_MASTER_MODE_SELECT));
 }
 
+/**
+ * @func   I2C_SendAddress
+ * @brief  Send the Address of slave to SDA line.
+ * @param  address
+ * @retval None
+ */
 void I2C_SendAddress(uint8_t address){
 	I2C_Send7bitAddress(I2C_MASTER_INSTANCE, address, I2C_Direction_Transmitter);
 
 	while (!I2C_CheckEvent(I2C_MASTER_INSTANCE, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
 }
 
+/**
+ * @func   I2C_TransmitData
+ * @brief  Send the data to slave
+ * @param  data
+ * @retval None
+ */
 void I2C_TransmitData(uint8_t data){
 	I2C_SendData(I2C_SLAVE_INSTANCE, data);
 
 	while (!I2C_CheckEvent(I2C_MASTER_INSTANCE, I2C_EVENT_MASTER_BYTE_TRANSMITTED));
 }
 
+/**
+ * @func   I2C_Stop
+ * @brief  Stop the I2C
+ * @param  None
+ * @retval None
+ */
 void I2C_Stop(void){
 	I2C_GenerateSTOP(I2C_MASTER_INSTANCE, ENABLE);
 }
 
+/**
+ * @func   Button_GetLogic
+ * @brief  Get the status of button
+ * @param  GPIOx, GPIO_Pin.
+ * @retval Status of Button.(0 or 1)
+ */
 static uint8_t Button_GetLogic(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin){
 	return GPIO_ReadInputDataBit(GPIOx, GPIO_Pin);
 }
 
+/**
+ * @func   Led_control
+ * @brief  Control the Led
+ * @param  GPIOx, GPIO_Pin, status
+ * @retval None.
+ */
 void Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status){
 	if (status == GPIO_PIN_SET){
 		GPIO_SetBits(GPIOx, GPIO_Pin);
@@ -317,6 +395,12 @@ void Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status){
 	}
 }
 
+/**
+ * @func   Green_control
+ * @brief  Control the Led Green
+ * @param  status
+ * @retval None.
+ */
 void Green_control(uint8_t status){
 	if (status == GPIO_PIN_SET){
 		Led_control(LEDGREEN1_GPIO_PORT, LEDGREEN1_GPIO_PIN, GPIO_PIN_SET);
@@ -327,3 +411,29 @@ void Green_control(uint8_t status){
 	}
 }
 
+/**
+ * @func   CalculateTime
+ * @brief  Calculate the time betwen 2 time.
+ * @param  Time now, Time Miles
+ * @retval Timenow - Time Miles
+ */
+static uint32_t Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent){
+	uint32_t TimeTotal;
+	if (TimeInit >= TimeCurrent){
+		TimeTotal = TimeCurrent - TimeInit;
+	}else {
+		TimeTotal = 0xFFFFFFFFU + TimeCurrent - TimeInit;
+	}
+	return TimeTotal;
+}
+
+/**
+ * @func   Delay
+ * @brief  Delay the time
+ * @param  Time delay
+ * @retval None
+ */
+void Delay(uint32_t ms){
+	uint32_t buff = GetMilSecTick();
+	while (Calculate_time(buff, GetMilSecTick()) <= ms);
+}

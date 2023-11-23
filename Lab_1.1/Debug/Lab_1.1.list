@@ -79,8 +79,8 @@ Disassembly of section .text:
  80001d0:	080002f4 	.word	0x080002f4
 
 080001d4 <main>:
-#define GPIOA_BASE_ADDR 			0x40020000UL
 
+//----------------------Val define----------
 uint32_t *pRccCfgrReg = (uint32_t *)RCC_CFGR_REG_ADDR;
 
 int main(void)

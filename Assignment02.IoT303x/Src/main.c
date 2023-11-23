@@ -25,8 +25,8 @@
 /******************************************************************************/
 static ucg_t ucg;
 
-#define GPIO_PIN_SET			1
-#define GPIO_PIN_RESET			0
+#define GPIO_PIN_SET					1
+#define GPIO_PIN_RESET					0
 
 #define I2C_MASTER_RCC					RCC_APB1Periph_I2C1
 #define I2C_MASTER_INSTANCE				I2C1
@@ -40,44 +40,21 @@ static ucg_t ucg;
 
 #define SLAVE_ADDRESS					0x40<<1
 
-static uint32_t Recive_Data[5];
+static uint32_t reciveData[5];
 
-/******************************************************************************/
-/*                     EXPORTED TYPES and DEFINITIONS                         */
-/******************************************************************************/
-
-/******************************************************************************/
-/*                              PRIVATE DATA                                  */
-/******************************************************************************/
-
-/******************************************************************************/
-/*                              EXPORTED DATA                                 */
-/******************************************************************************/
-uint32_t Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent){
-	uint32_t TimeTotal;
-	if (TimeInit >= TimeCurrent){
-		TimeTotal = TimeCurrent - TimeInit;
-	}else {
-		TimeTotal = 0xFFFFFFFFU + TimeCurrent - TimeInit;
-	}
-	return TimeTotal;
-}
-
-void Delay(uint32_t ms){
-	uint32_t buff = GetMilSecTick();
-	while (Calculate_time(buff, GetMilSecTick()) <= ms);
-}
 /******************************************************************************/
 /*                            PRIVATE FUNCTIONS                               */
 /******************************************************************************/
-void AppInitCommon();
-void I2C1_Init(void);
-void I2C_Start(uint8_t direction);
-void I2C_SendAddress(uint8_t address);
-void I2C_TransmitData(uint8_t data);
-uint8_t I2C_Recevie_nack(void);
-uint8_t I2C_Recevie_ack(void);
-void I2C_Stop(void);
+void 		AppInitCommon();
+void 		I2C1_Init(void);
+void 		I2C_Start(uint8_t direction);
+void 		I2C_SendAddress(uint8_t address);
+void 		I2C_TransmitData(uint8_t data);
+void 		Delay(uint32_t ms);
+void 		I2C_Stop(void);
+uint8_t 	I2C_Recevie_nack(void);
+uint8_t 	I2C_Recevie_ack(void);
+uint32_t 	Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent);
 
 /******************************************************************************/
 /*                            EXPORTED FUNCTIONS                              */
@@ -100,7 +77,7 @@ int main(void)
 			I2C_Stop();
 
 			I2C_Start(I2C_Direction_Receiver);
-			Recive_Data[0] = (I2C_Recevie_ack()<<8)*100/65536 - 6;
+			reciveData[0] = (I2C_Recevie_ack()<<8)*100/65536 - 6;
 			I2C_Stop();
 
 			I2C_Start(I2C_Direction_Transmitter);
@@ -108,13 +85,13 @@ int main(void)
 			I2C_Stop();
 
 			I2C_Start(I2C_Direction_Receiver);
-			Recive_Data[1] = (I2C_Recevie_ack()<<8)*175.72/65536 - 46.85;
+			reciveData[1] = (I2C_Recevie_ack()<<8)*175.72/65536 - 46.85;
 			I2C_Stop();
 			Timetick = GetMilSecTick();
 			memset(buffer1,0,sizeof(buffer1));
-			sprintf(buffer1,"HUMI: %0.2d %%",Recive_Data[0]);
+			sprintf(buffer1,"HUMI: %0.2d %%",reciveData[0]);
 			memset(buffer2,0,sizeof(buffer2));
-			sprintf(buffer2,"TEMP: %d oC",Recive_Data[1]);
+			sprintf(buffer2,"TEMP: %d oC",reciveData[1]);
 			ucg_DrawString(&ucg, 10, 35, 0,"Assignment 2");
 			ucg_DrawString(&ucg, 10, 65, 0,buffer1);
 			ucg_DrawString(&ucg, 10, 100, 0,buffer2);
@@ -123,7 +100,12 @@ int main(void)
 	}
 }
 /******************************************************************************/
-
+/**
+ * @func   AppInitCommon
+ * @brief  Initzation all Parameter
+ * @param  None
+ * @retval None
+ */
 void AppInitCommon(){
 	TimerInit();
 	Ucglib4WireSWSPI_begin(&ucg, UCG_FONT_MODE_SOLID);
@@ -134,6 +116,39 @@ void AppInitCommon(){
 	ucg_SetRotate180(&ucg);
 }
 
+/**
+ * @func   CalculateTime
+ * @brief  Calculate the time betwen 2 time.
+ * @param  Time now, Time Miles
+ * @retval Timenow - Time Miles
+ */
+uint32_t Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent){
+	uint32_t TimeTotal;
+	if (TimeInit >= TimeCurrent){
+		TimeTotal = TimeCurrent - TimeInit;
+	}else {
+		TimeTotal = 0xFFFFFFFFU + TimeCurrent - TimeInit;
+	}
+	return TimeTotal;
+}
+
+/**
+ * @func   Delay
+ * @brief  Delay the time
+ * @param  Time delay
+ * @retval None
+ */
+void Delay(uint32_t ms){
+	uint32_t buff = GetMilSecTick();
+	while (Calculate_time(buff, GetMilSecTick()) <= ms);
+}
+
+/**
+ * @func   I2C1Init
+ * @brief  Initzation parameter of I2C1.
+ * @param  None
+ * @retval None
+ */
 void I2C1_Init(void){
 	GPIO_InitTypeDef	GPIO_InitStructure;
 	I2C_InitTypeDef		I2C_InitStructure;
@@ -175,6 +190,12 @@ void I2C1_Init(void){
 	I2C_Cmd(I2C_MASTER_INSTANCE, ENABLE);
 }
 
+/**
+ * @func   I2C start
+ * @brief  Start I2C, Send 7 bit address to Slave and wating slave in Idle status.
+ * @param  direction
+ * @retval None
+ */
 void I2C_Start(uint8_t direction){
 	//Doi I2Cx khong ban
 	while (I2C_GetFlagStatus(I2C_MASTER_INSTANCE, I2C_FLAG_BUSY));
@@ -195,7 +216,12 @@ void I2C_Start(uint8_t direction){
 	}
 }
 
-
+/**
+ * @func   I2C transmitData
+ * @brief  Send data to Slave and save data in return data
+ * @param  data
+ * @retval data
+ */
 void I2C_TransmitData(uint8_t data){
 	I2C_SendData(I2C_MASTER_INSTANCE, data);
 
@@ -214,6 +240,12 @@ uint8_t I2C_Recevie_nack(void){
 	return data;
 }
 
+/**
+ * @func   I2C Recevie ack
+ * @brief  Recevie bit ack from slave
+ * @param  None
+ * @retval Bit ack (data)
+ */
 uint8_t I2C_Recevie_ack(void){
 	//Bat ACK cua recevie data
 	I2C_AcknowledgeConfig(I2C_MASTER_INSTANCE, DISABLE);
@@ -226,6 +258,12 @@ uint8_t I2C_Recevie_ack(void){
 	return data;
 }
 
+/**
+ * @func   I2C Recevie ack
+ * @brief  Recevie bit ack from slave
+ * @param  None
+ * @retval Bit ack (data)
+ */
 void I2C_Stop(void){
 	I2C_GenerateSTOP(I2C_MASTER_INSTANCE, ENABLE);
 }

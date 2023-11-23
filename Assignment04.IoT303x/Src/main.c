@@ -48,12 +48,67 @@
 
 #define SYSCFG_GPIO_RCC					RCC_APB2Periph_SYSCFG
 
-uint16_t 	ADC_Val;
-uint16_t  	Kalman_light;
 
 /******************************************************************************/
-/*                     EXPORTED TYPES and DEFINITIONS                         */
+/*                            PRIVATE FUNCTIONS                               */
 /******************************************************************************/
+void 				Appinit_Common();
+void 				TimPWM_Init(void);
+void 				ADC_LightInit();
+void 				Delay(uint32_t ms);
+static void 		Led_ControlPWM(uint8_t dutyCycle);
+uint16_t 			ADC_GetValue(void);
+uint32_t 			Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent);
+
+uint16_t 			getAdcVal;
+uint16_t 			timeNow = 0;
+/******************************************************************************/
+/*                            EXPORTED FUNCTIONS                              */
+/******************************************************************************/
+int main(void)
+{
+	//Khoi tao cac thong so ban dau.
+	Appinit_Common();
+
+	while (1){
+		if (Calculate_time(timeNow, GetMilSecTick()) >100){
+		getAdcVal =  ADC_GetValue();
+		Led_ControlPWM(getAdcVal*100/4095);
+		timeNow = GetMilSecTick();
+		}
+   }
+}
+
+/******************************************************************************/
+/**
+ * @func   AppInitCommon
+ * @brief  Initialize common application
+ * @param  None
+ * @retval None
+ */
+void Appinit_Common(){
+	//Khoi tao ADC
+	ADC_LightInit();
+
+	//Khoi tao PWM
+	TimPWM_Init();
+
+	//Khoi tao system clock
+	SystemCoreClockUpdate();
+
+	//Khoi tao Timer
+	TimerInit();
+
+	//Khoi tao system
+	SystemInit();
+}
+
+/**
+ * @func   CalculateTime
+ * @brief  Calculate the time betwen 2 time.
+ * @param  Time now, Time Miles
+ * @retval Timenow - Time Miles
+ */
 uint32_t Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent){
 	uint32_t TimeTotal;
 	if (TimeInit >= TimeCurrent){
@@ -64,51 +119,23 @@ uint32_t Calculate_time(uint32_t TimeInit, uint32_t TimeCurrent){
 	return TimeTotal;
 }
 
+/**
+ * @func   Delay
+ * @brief  Delay the time
+ * @param  Time delay
+ * @retval None
+ */
 void Delay(uint32_t ms){
 	uint32_t buff = GetMilSecTick();
 	while (Calculate_time(buff, GetMilSecTick()) <= ms);
 }
 
-/******************************************************************************/
-/*                              PRIVATE DATA                                  */
-/******************************************************************************/
-
-/******************************************************************************/
-/*                              EXPORTED DATA                                 */
-/******************************************************************************/
-
-/******************************************************************************/
-/*                            PRIVATE FUNCTIONS                               */
-/******************************************************************************/
-void TimPWM_Init(void);
-static void Led_ControlPWM(uint8_t dutyCycle);
-uint16_t ADC_GetValue(void);
-void ADC_LightInit();
-static void ABL_Process(void);
-//static void Led_Init(void);
-//void Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status);
-//void Green_control(uint8_t status);
-//void LedGreen_blink(uint8_t NumBlink);
-
-/******************************************************************************/
-/*                            EXPORTED FUNCTIONS                              */
-/******************************************************************************/
-uint16_t Time_now = 0;
-int main(void)
-{
-	SystemCoreClockUpdate();
-	TimerInit();
-	TimPWM_Init();
-	ADC_LightInit();
-	while (1){
-		if (Calculate_time(Time_now, GetMilSecTick()) >100){
-		ADC_Val =  ADC_GetValue();
-		Led_ControlPWM(ADC_Val*100/4095);
-		Time_now = GetMilSecTick();
-		}
-   }
-}
-/******************************************************************************/
+/**
+ * @func   TimPWMInit
+ * @brief  Initzation the PWM.
+ * @param  None
+ * @retval None
+ */
 void TimPWM_Init(void){
 	//Init typedef
 	TIM_TimeBaseInitTypeDef TIM_Initstructe;
@@ -152,6 +179,12 @@ void TimPWM_Init(void){
 	TIM_CtrlPWMOutputs(TIM_INSTANCE, ENABLE);
 }
 
+/**
+ * @func   ADC Light Init
+ * @brief  Initzation the ADC read from GPIO
+ * @param  None
+ * @retval None
+ */
 void ADC_LightInit(){
 	ADC_InitTypeDef 		ADC_Initstructure;
 	ADC_CommonInitTypeDef	ADC_CommonInitstructure;
@@ -200,19 +233,31 @@ void ADC_LightInit(){
 	ADC_Cmd(ADC_INSTANCE, ENABLE);
 }
 
+/**
+ * @func   ADC Get Value
+ * @brief  Get the Value of the ADC
+ * @param  None
+ * @retval ADC read
+ */
 uint16_t ADC_GetValue(void){
-	uint16_t ADC_Value = 0;
+	uint16_t getAdcValue = 0;
 
 	ADC_SoftwareStartConv(ADC_INSTANCE);
 
 	while (ADC_GetFlagStatus(ADC_INSTANCE, ADC_FLAG_EOC) == RESET);
 
-	ADC_Value = ADC_GetConversionValue(ADC_INSTANCE);
+	getAdcValue = ADC_GetConversionValue(ADC_INSTANCE);
 
 
-	return ADC_Value;
+	return getAdcValue;
 }
 
+/**
+ * @func   Led Control PWM
+ * @brief  Control the Amplitude light of Led
+ * @param  dutyCycle
+ * @retval None
+ */
 static void Led_ControlPWM(uint8_t dutyCycle){
 	static uint32_t pulse_length = 0;
 	if (dutyCycle >= 100) return;
@@ -220,82 +265,3 @@ static void Led_ControlPWM(uint8_t dutyCycle){
 
 	TIM_SetCompare4(TIM_INSTANCE, pulse_length);
 }
-
-//static
-//void ABL_Process(void)
-//{
-//	uint32_t dwTimeCurrent;
-//	static uint32_t dwTimeTotal, dwTimeInit;
-//
-//	dwTimeCurrent = GetMilSecTick();
-//
-//	if(dwTimeCurrent >= dwTimeInit)
-//	{
-//		dwTimeTotal += dwTimeCurrent - dwTimeInit;
-//	}
-//	else
-//	{
-//		dwTimeTotal += 0xFFFFFFFFU - dwTimeCurrent + dwTimeInit;
-//	}
-//
-//	if(dwTimeTotal >= 100)
-//	{
-//		dwTimeTotal = 0;
-//
-//		/* Read ADC value from light sensor */
-//		ADC_Val  = ADC_GetValue();
-//
-//		Led_ControlPWM(ADC_Val);
-//	}
-//	dwTimeInit = dwTimeCurrent;
-//}
-
-//static void Led_Init(void){
-//	//Khai bao kieu du lieu
-//	GPIO_InitTypeDef GPIO_Initstruct;
-//
-//	//Bat block cho GPIOA va GPIOB
-//	RCC_AHB1PeriphClockCmd(LED_GPIO_RCC, ENABLE);
-//
-//	//Khoi tao cac gia tri ban dau cho GREEN1
-//	GPIO_Initstruct.GPIO_Pin = LEDGREEN1_GPIO_PIN;
-//	GPIO_Initstruct.GPIO_Mode = GPIO_Mode_OUT;
-//	GPIO_Initstruct.GPIO_Speed = GPIO_Speed_50MHz;
-//	GPIO_Initstruct.GPIO_OType = GPIO_OType_PP;
-//	GPIO_Init(LEDGREEN1_GPIO_PORT, &GPIO_Initstruct);
-//
-//	//Khoi tao cac gia tri ban dau cho GREEN2
-//	GPIO_Initstruct.GPIO_Pin = LEDGREEN2_GPIO_PIN;
-//	GPIO_Initstruct.GPIO_Mode = GPIO_Mode_OUT;
-//	GPIO_Initstruct.GPIO_Speed = GPIO_Speed_50MHz;
-//	GPIO_Initstruct.GPIO_OType = GPIO_OType_PP;
-//	GPIO_Init(LEDGREEN2_GPIO_PORT, &GPIO_Initstruct);
-//
-//}
-//
-//void Led_control(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint8_t status){
-//	if (status == GPIO_PIN_SET){
-//		GPIO_SetBits(GPIOx, GPIO_Pin);
-//	}else if(status == GPIO_PIN_RESET){
-//		GPIO_ResetBits(GPIOx, GPIO_Pin);
-//	}
-//}
-
-//void Green_control(uint8_t status){
-//	if (status == GPIO_PIN_SET){
-//		Led_control(LEDGREEN1_GPIO_PORT, LEDGREEN1_GPIO_PIN, GPIO_PIN_SET);
-//		Led_control(LEDGREEN2_GPIO_PORT, LEDGREEN2_GPIO_PIN, GPIO_PIN_SET);
-//	}else if(status == GPIO_PIN_RESET){
-//		Led_control(LEDGREEN1_GPIO_PORT, LEDGREEN1_GPIO_PIN, GPIO_PIN_RESET);
-//		Led_control(LEDGREEN2_GPIO_PORT, LEDGREEN2_GPIO_PIN, GPIO_PIN_RESET);
-//	}
-//}
-//
-//void LedGreen_blink(uint8_t NumBlink){
-//	for (int i = 0; i < NumBlink; i++){
-//		Green_control(1);
-//		Delay(100);
-//		Green_control(0);
-//		Delay(100);
-//	}
-//}
